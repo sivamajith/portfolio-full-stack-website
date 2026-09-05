@@ -21,7 +21,6 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
 import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
-import EmojiEventsRoundedIcon from '@mui/icons-material/EmojiEventsRounded';
 import sounds from '../utils/SoundManager';
 import useSiteSettings from '../hooks/useSiteSettings';
 

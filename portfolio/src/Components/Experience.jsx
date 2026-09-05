@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Chip } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import RocketLaunchRoundedIcon from '@mui/icons-material/RocketLaunchRounded';
@@ -129,7 +129,7 @@ export default function Experience({ onNavigate, onOpenResume }) {
 
       {/* Feature 7: Work Experience History Cards */}
       <section className="work-experience-section">
-        <Typography className="work-exp-kicker">// PROFESSIONAL WORK HISTORY</Typography>
+        <Typography className="work-exp-kicker">{"// PROFESSIONAL WORK HISTORY"}</Typography>
         <Typography component="h2" className="work-exp-title">Where I&apos;ve Made an Impact</Typography>
         <Box className="work-exp-cards">
           {workList.map((job, index) => (
@@ -166,7 +166,7 @@ export default function Experience({ onNavigate, onOpenResume }) {
 
       {/* Feature 8: Education & Academic Credentials */}
       <section className="education-section">
-        <Typography className="edu-kicker">// ACADEMIC FOUNDATION</Typography>
+        <Typography className="edu-kicker">{"// ACADEMIC FOUNDATION"}</Typography>
         <Typography component="h2" className="edu-title">Education &amp; Qualifications</Typography>
         <Box className="edu-cards">
           {educationList.map((edu, idx) => (

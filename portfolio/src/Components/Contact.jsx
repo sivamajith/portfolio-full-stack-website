@@ -6,7 +6,6 @@ import PhoneInTalkOutlinedIcon from '@mui/icons-material/PhoneInTalkOutlined';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import { PortfolioNavigation } from './Home';
 import useSiteSettings from '../hooks/useSiteSettings';
 import sounds from '../utils/SoundManager';
@@ -411,7 +410,7 @@ export default function Contact({ onNavigate, prefillSpec, onOpenResume }) {
 
       {/* Feature 10: Frequently Asked Questions Accordion */}
       <section className="contact-faq-section">
-        <span className="contact-faq-kicker">// GOT QUESTIONS?</span>
+        <span className="contact-faq-kicker">{"// GOT QUESTIONS?"}</span>
         <Typography component="h2" className="contact-faq-title">Frequently Asked Questions</Typography>
         <div className="faq-list">
           {[

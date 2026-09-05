@@ -200,7 +200,7 @@ const About = ({ onNavigate, onOpenResume }) => {
 
         {/* Feature 4: Core Engineering Values & Principles */}
         <Box className="about-values" sx={{ width: '100%', gridColumn: '1 / -1' }}>
-          <Typography className="about-kicker">// VALUES &amp; PRINCIPLES</Typography>
+          <Typography className="about-kicker">{"// VALUES & PRINCIPLES"}</Typography>
           <Typography component="h2" className="about-values-title">How I Build &amp; Ship Software</Typography>
           <Box className="about-values-grid">
             {values.map((val) => (
@@ -215,7 +215,7 @@ const About = ({ onNavigate, onOpenResume }) => {
 
         {/* Feature 5: Achievements & Certifications */}
         <Box className="about-achievements" sx={{ width: '100%', gridColumn: '1 / -1' }}>
-          <Typography className="about-kicker">// HONORS &amp; CREDENTIALS</Typography>
+          <Typography className="about-kicker">{"// HONORS & CREDENTIALS"}</Typography>
           <Typography component="h2" className="about-achievements-title">Certifications &amp; Milestones</Typography>
           <Box className="about-achievements-grid">
             {achievements.map((ach, index) => (

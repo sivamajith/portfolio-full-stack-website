@@ -12,11 +12,8 @@ import {
   Sparkles,
   Layers,
   Zap,
-  TrendingUp,
   Cpu,
-  SlidersHorizontal,
   Flame,
-  Filter,
   Check,
 } from 'lucide-react';
 import { PortfolioNavigation } from './Home';
