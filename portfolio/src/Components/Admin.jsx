@@ -46,9 +46,7 @@ import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import WorkRoundedIcon from '@mui/icons-material/WorkRounded';
 import TerminalRoundedIcon from '@mui/icons-material/TerminalRounded';
-import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
 import DesignServicesRoundedIcon from '@mui/icons-material/DesignServicesRounded';
-import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
 import { firebaseReady, registerDeviceToken, listenForForegroundMessages } from '../firebase';
 
@@ -427,9 +425,13 @@ export default function Admin() {
           messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || '',
           appId: process.env.REACT_APP_FIREBASE_APP_ID || '',
         });
-        const registration = await navigator.serviceWorker.register(`/firebase-messaging-sw.js?${config.toString()}`);
-        serviceWorkerRegistration = await navigator.serviceWorker.ready;
-        await registration.update();
+        const workerUrl = `/firebase-messaging-sw.js?${config.toString()}`;
+        serviceWorkerRegistration = await navigator.serviceWorker.getRegistration('/');
+        if (!serviceWorkerRegistration?.active?.scriptURL.includes('/firebase-messaging-sw.js')) {
+          serviceWorkerRegistration = await navigator.serviceWorker.register(workerUrl, { scope: '/' });
+        }
+        await navigator.serviceWorker.ready;
+        await serviceWorkerRegistration.update();
       }
 
       const deviceToken = await registerDeviceToken(serviceWorkerRegistration);
@@ -469,6 +471,11 @@ export default function Admin() {
     if ('Notification' in window && Notification.permission === 'granted') {
       registerAndSyncTokenRef.current();
     }
+    const tokenRefreshInterval = window.setInterval(() => {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        registerAndSyncTokenRef.current();
+      }
+    }, 15 * 60 * 1000);
     const unsubscribe = listenForForegroundMessages((payload) => {
       const title = payload?.notification?.title || (payload?.data?.type === 'contact_message' ? 'New portfolio contact message' : 'Portfolio update');
       const body = payload?.notification?.body || payload?.data?.subject || 'New portfolio update';
@@ -485,6 +492,7 @@ export default function Admin() {
     });
 
     return () => {
+      window.clearInterval(tokenRefreshInterval);
       if (typeof unsubscribe === 'function') unsubscribe();
     };
   }, [token]);
@@ -816,8 +824,6 @@ export default function Admin() {
     { label: 'Projects', icon: <WorkOutlineRoundedIcon /> },
     { label: 'Experience & Edu', icon: <TimelineRoundedIcon /> },
     { label: 'Services', icon: <DesignServicesRoundedIcon /> },
-    { label: 'Blog Posts', icon: <ArticleRoundedIcon /> },
-    { label: 'Now Page Focus', icon: <AccessTimeRoundedIcon /> },
     { label: 'Contact, FAQ & Inbox', icon: <MailRoundedIcon /> },
     { label: 'Reviews', icon: <RateReviewRoundedIcon /> },
     { label: 'Appearance', icon: <PaletteRoundedIcon /> },
@@ -883,11 +889,9 @@ export default function Admin() {
               {tab === 4 && 'Projects Management'}
               {tab === 5 && 'Experience, Work History & Education'}
               {tab === 6 && 'Services, Offerings & Process'}
-              {tab === 7 && 'Blog & Articles Management'}
-              {tab === 8 && 'Now Page & Current Focus'}
-              {tab === 9 && 'Contact Details, FAQ & Inbox'}
-              {tab === 10 && 'Client Testimonials'}
-              {tab === 11 && 'Site Theme & Appearance'}
+              {tab === 7 && 'Contact Details, FAQ & Inbox'}
+              {tab === 8 && 'Client Testimonials'}
+              {tab === 9 && 'Site Theme & Appearance'}
             </Typography>
             <Typography>
               Update, delete, or change all front UI sections in real-time.
@@ -895,6 +899,14 @@ export default function Admin() {
           </Box>
 
           <Box className="admin-header-actions">
+            <Button
+              startIcon={<LaunchRoundedIcon />}
+              onClick={() => window.open(`${window.location.origin}/home`, '_blank', 'noopener,noreferrer')}
+              variant="outlined"
+              color="success"
+            >
+              Live Website
+            </Button>
             {notificationPermission !== 'granted' && (
               <Button
                 startIcon={<NotificationsActiveRoundedIcon />}
@@ -1066,9 +1078,9 @@ export default function Admin() {
                   <Button variant="outlined" startIcon={<BoltRoundedIcon />} onClick={() => setTab(3)}>Manage Skills Matrix</Button>
                   <Button variant="outlined" startIcon={<WorkOutlineRoundedIcon />} onClick={() => setTab(4)}>Add / Edit Projects</Button>
                   <Button variant="outlined" startIcon={<TimelineRoundedIcon />} onClick={() => setTab(5)}>Edit Experience</Button>
-                  <Button variant="outlined" startIcon={<MailRoundedIcon />} onClick={() => setTab(6)}>Check Contact Inbox</Button>
-                  <Button variant="outlined" startIcon={<RateReviewRoundedIcon />} onClick={() => setTab(7)}>Moderate Reviews</Button>
-                  <Button variant="outlined" startIcon={<PaletteRoundedIcon />} onClick={() => setTab(8)}>Theme & Appearance</Button>
+                  <Button variant="outlined" startIcon={<MailRoundedIcon />} onClick={() => setTab(7)}>Check Contact Inbox</Button>
+                  <Button variant="outlined" startIcon={<RateReviewRoundedIcon />} onClick={() => setTab(8)}>Moderate Reviews</Button>
+                  <Button variant="outlined" startIcon={<PaletteRoundedIcon />} onClick={() => setTab(9)}>Theme & Appearance</Button>
                 </Box>
               </Box>
             </Box>
@@ -1117,7 +1129,7 @@ export default function Admin() {
                   )}
                 </Box>
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, flex: 1, minWidth: 260 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, flex: 1, minWidth: 'min(100%, 260px)' }}>
                   <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
                     <Button
                       component="label"
@@ -2999,7 +3011,7 @@ export default function Admin() {
         )}
 
         {/* TAB 7: BLOG & ARTICLES MANAGER */}
-        {tab === 7 && (
+        {false && tab === 7 && (
           <Box className="admin-wide">
             <Box className="admin-section-header">
               <Typography variant="h5">Blog &amp; Articles Management</Typography>
@@ -3147,7 +3159,7 @@ export default function Admin() {
                           current[pIdx] = { ...current[pIdx], image: e.target.value };
                           setSettings({ ...settings, blogPosts: current });
                         }}
-                        sx={{ flex: 1, minWidth: 260 }}
+                        sx={{ flex: 1, minWidth: 'min(100%, 260px)' }}
                       />
                       <FormControlLabel
                         control={
@@ -3208,8 +3220,8 @@ export default function Admin() {
           </Box>
         )}
 
-        {/* TAB 8: NOW PAGE & CURRENT FOCUS */}
-        {tab === 8 && (
+        {/* Removed: Now Page & Current Focus */}
+        {false && tab === 8 && (
           <Box className="admin-wide">
             <Box className="admin-section-header">
               <Typography variant="h5">Now Page &amp; Current Focus Manager</Typography>
@@ -3382,8 +3394,8 @@ export default function Admin() {
           </Box>
         )}
 
-        {/* TAB 9: CONTACT DETAILS, FAQ & MESSAGES INBOX */}
-        {tab === 9 && (
+        {/* TAB 7: CONTACT DETAILS, FAQ & MESSAGES INBOX */}
+        {tab === 7 && (
           <Box className="admin-wide">
             <Box className="admin-section-header">
               <Typography variant="h5">Contact Settings, FAQ &amp; Messages Inbox</Typography>
@@ -3605,8 +3617,8 @@ export default function Admin() {
           </Box>
         )}
 
-        {/* TAB 10: CLIENT REVIEWS & TESTIMONIALS */}
-        {tab === 10 && (
+        {/* TAB 8: CLIENT REVIEWS & TESTIMONIALS */}
+        {tab === 8 && (
           <Box className="admin-wide">
             <Box className="admin-section-header">
               <Typography variant="h5">Client Testimonials &amp; Reviews Moderation</Typography>
@@ -3748,8 +3760,8 @@ export default function Admin() {
           </Box>
         )}
 
-        {/* TAB 11: THEME, APPEARANCE & BACKUP */}
-        {tab === 11 && (
+        {/* TAB 9: THEME, APPEARANCE & BACKUP */}
+        {tab === 9 && (
           <Box className="admin-wide">
             <Box className="admin-section-header">
               <Typography variant="h5">Site Theme, Brand &amp; Backup</Typography>

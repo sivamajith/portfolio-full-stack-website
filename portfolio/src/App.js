@@ -1,7 +1,7 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useEffect, useState, useMemo } from 'react';
+import { startTransition, useEffect, useState, useMemo } from 'react';
 import {
   Box,
   IconButton,
@@ -24,6 +24,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
 import Home from './Components/Home';
+import Home, { PortfolioNavigation } from './Components/Home';
 import About from './Components/About';
 import Skills from './Components/Skill';
 import Projects from './Components/Projects';
@@ -173,18 +174,18 @@ export default function App() {
 
   const navigate = (page) => {
     sounds.playClick();
-    setCurrentPage(page);
+    startTransition(() => setCurrentPage(page));
     const route = pageRoutes[page];
     if (route && window.location.pathname !== route) window.history.pushState({}, '', route);
     if (isMobileSinglePage) {
       const sectionSelectors = {
-        Home: '.home-page',
-        About: '.about-page',
-        Skills: '.skills-page',
-        Projects: '.projects-section',
-        Experience: '.experience-page',
-        Services: '.services-page',
-        Contact: '.contact-page',
+        Home: '.mobile-all-pages .home-page',
+        About: '.mobile-all-pages .about-page',
+        Skills: '.mobile-all-pages .skills-page',
+        Projects: '.mobile-all-pages .projects-section',
+        Experience: '.mobile-all-pages .experience-page',
+        Services: '.mobile-all-pages .services-page',
+        Contact: '.mobile-all-pages .contact-page',
       };
       window.requestAnimationFrame(() => {
         const targetElement = document.querySelector(sectionSelectors[page]);
@@ -315,6 +316,15 @@ export default function App() {
           }}
         />
 
+        {!isMobileSinglePage && <Box className="desktop-page">{page}</Box>}
+        {isMobileSinglePage && mobilePages}
+        <PortfolioNavigation
+          onNavigate={navigate}
+          activePage={currentPage}
+          onOpenResume={() => setResumeOpen(true)}
+          onOpenScheduler={() => setSchedulerOpen(true)}
+        />
+
         <Box className="desktop-page">{page}</Box>
         {mobilePages}
 
@@ -441,11 +451,13 @@ export default function App() {
           anchorEl={themeAnchor}
           open={Boolean(themeAnchor)}
           onClose={() => setThemeAnchor(null)}
-          PaperProps={{
-            sx: {
-              borderRadius: '16px',
-              mt: -1,
-              boxShadow: '0 12px 32px rgba(15, 23, 42, 0.2)',
+          slotProps={{
+            paper: {
+              sx: {
+                borderRadius: '16px',
+                mt: -1,
+                boxShadow: '0 12px 32px rgba(15, 23, 42, 0.2)',
+              },
             },
           }}
         >

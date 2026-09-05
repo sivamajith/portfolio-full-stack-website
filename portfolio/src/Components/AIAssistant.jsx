@@ -757,8 +757,8 @@ export default function AIAssistant({
       <Box
         sx={{
           position: 'fixed',
-          bottom: { xs: 14, sm: 18, md: 24 },
-          left: { xs: 14, sm: 18, md: 28 },
+          bottom: { xs: 10, sm: 18, md: 24 },
+          left: { xs: 10, sm: 18, md: 28 },
           zIndex: 1300,
         }}
       >
@@ -779,17 +779,17 @@ export default function AIAssistant({
                     },
                   }}
                 >
-                  <SmartToyRoundedIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />
+                    <SmartToyRoundedIcon sx={{ fontSize: { xs: 16, sm: 20 } }} />
                 </Badge>
               }
               sx={{
                 borderRadius: '999px',
                 background: 'linear-gradient(135deg, var(--accent-color, #22c55e) 0%, var(--accent-dark, #16a34a) 100%)',
                 color: '#ffffff',
-                px: { xs: 2.2, sm: 2.6 },
-                py: { xs: 1.0, sm: 1.2 },
+                px: { xs: 1.5, sm: 2.6 },
+                py: { xs: 0.75, sm: 1.2 },
                 fontWeight: 800,
-                fontSize: { xs: 12.5, sm: 13.5 },
+                fontSize: { xs: 11, sm: 13.5 },
                 textTransform: 'none',
                 letterSpacing: '0.02em',
                 boxShadow: '0 16px 36px rgba(34, 197, 94, 0.35)',

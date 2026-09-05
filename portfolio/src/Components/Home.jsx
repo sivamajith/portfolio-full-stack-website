@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Drawer, IconButton, List, ListItem, ListItemText, Typography, Chip } from '@mui/material';
+import { Box, Button, Drawer, IconButton, List, ListItemButton, ListItemText, Typography } from '@mui/material';
 import {
   ArrowForward,
   Close,
@@ -10,14 +10,47 @@ import {
   Menu,
   Send,
   WhatsApp,
-  NorthEast,
   StarRounded,
+  HomeRounded,
+  PersonRounded,
+  CodeRounded,
+  FolderSpecialRounded,
+  WorkRounded,
+  LayersRounded,
+  MailRounded,
+  ArticleRounded,
+  CalendarMonthRounded,
 } from '@mui/icons-material';
 import useSiteSettings from '../hooks/useSiteSettings';
 import sounds from '../utils/SoundManager';
-import { loadProjects as loadCachedProjects, loadReviews, clearPublicDataCache } from '../utils/publicData';
+import { loadReviews, clearPublicDataCache } from '../utils/publicData';
 
 const navItems = ['Home', 'About', 'Skills', 'Projects', 'Experience', 'Services', 'Contact'];
+
+const getNavIcon = (item) => {
+  switch (item) {
+    case 'Home':
+      return <HomeRounded fontSize="small" />;
+    case 'About':
+      return <PersonRounded fontSize="small" />;
+    case 'Skills':
+      return <CodeRounded fontSize="small" />;
+    case 'Projects':
+      return <FolderSpecialRounded fontSize="small" />;
+    case 'Experience':
+      return <WorkRounded fontSize="small" />;
+    case 'Services':
+      return <LayersRounded fontSize="small" />;
+    case 'Contact':
+      return <MailRounded fontSize="small" />;
+    case 'Blog':
+      return <ArticleRounded fontSize="small" />;
+    case 'Now':
+      return <CalendarMonthRounded fontSize="small" />;
+    default:
+      return <StarRounded fontSize="small" />;
+  }
+};
 
 export function PortfolioNavigation({ onNavigate, activePage = 'Home', onOpenResume, onOpenScheduler }) {
   const settings = useSiteSettings();
@@ -61,10 +94,6 @@ export function PortfolioNavigation({ onNavigate, activePage = 'Home', onOpenRes
           </nav>
         </div>
         <div className="home-header-actions">
-          <button type="button" className="home-talk-button" onClick={() => handleNavigation('Contact')}>
-            <span>Let&apos;s Talk</span>
-            <ArrowForward fontSize="inherit" className="home-talk-arrow" />
-          </button>
           <IconButton className="home-menu-button" onClick={() => setMobileOpen(true)} aria-label="Open menu">
             <Menu />
           </IconButton>
@@ -74,67 +103,241 @@ export function PortfolioNavigation({ onNavigate, activePage = 'Home', onOpenRes
         anchor="right"
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
-        PaperProps={{
-          sx: {
-            width: { xs: '82vw', sm: 320 },
-            maxWidth: 340,
-            p: 2.5,
-            bgcolor: (t) => t.palette.mode === 'dark' ? '#0f172a' : '#ffffff',
-            backgroundImage: 'none',
+        slotProps={{
+          paper: {
+            sx: {
+              width: { xs: 'min(270px, 84vw)', sm: '300px' },
+              boxSizing: 'border-box',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              p: { xs: 1.5, sm: 2 },
+              bgcolor: (t) => (t.palette.mode === 'dark' ? '#0f172a' : '#ffffff'),
+              color: (t) => (t.palette.mode === 'dark' ? '#f8fafc' : '#0f172a'),
+              backgroundImage: 'none',
+              boxShadow: '-8px 0 25px rgba(0, 0, 0, 0.15)',
+            },
           },
         }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, pb: 1, borderBottom: '1px solid rgba(148,163,184,0.15)' }}>
-          <Typography sx={{ fontWeight: 800, fontSize: 13, color: 'var(--accent-dark, #16a34a)', letterSpacing: 1 }}>
-            PORTFOLIO NAVIGATION
-          </Typography>
-          <IconButton onClick={() => setMobileOpen(false)} size="small" aria-label="Close menu">
-            <Close fontSize="small" />
+        {/* Drawer Header */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            mb: { xs: 1, sm: 1.5 },
+            pb: { xs: 1, sm: 1.25 },
+            flexShrink: 0,
+            borderBottom: (t) =>
+              t.palette.mode === 'dark'
+                ? '1px solid rgba(255, 255, 255, 0.1)'
+                : '1px solid rgba(148, 163, 184, 0.2)',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+            <Box
+              sx={{
+                width: 28,
+                height: 28,
+                borderRadius: '8px',
+                bgcolor: 'var(--accent-color, #22c55e)',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 800,
+                fontSize: '13px',
+                boxShadow: '0 3px 10px rgba(34, 197, 94, 0.3)',
+                flexShrink: 0,
+              }}
+            >
+              {settings?.brandLogo || 'P'}
+            </Box>
+            <Box sx={{ minWidth: 0 }}>
+              <Typography
+                sx={{
+                  fontWeight: 800,
+                  fontSize: { xs: '12px', sm: '13px' },
+                  lineHeight: 1.15,
+                  letterSpacing: '0.4px',
+                  color: (t) => (t.palette.mode === 'dark' ? '#f8fafc' : '#0f172a'),
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                NAVIGATION
+              </Typography>
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  fontSize: '10px',
+                  color: 'var(--accent-dark, #16a34a)',
+                  letterSpacing: '0.2px',
+                }}
+              >
+                Portfolio Menu
+              </Typography>
+            </Box>
+          </Box>
+          <IconButton
+            onClick={() => setMobileOpen(false)}
+            size="small"
+            aria-label="Close menu"
+            sx={{
+              p: 0.5,
+              borderRadius: '50%',
+              color: 'text.secondary',
+              bgcolor: (t) =>
+                t.palette.mode === 'dark'
+                  ? 'rgba(255,255,255,0.06)'
+                  : 'rgba(0,0,0,0.04)',
+              '&:hover': {
+                bgcolor: (t) =>
+                  t.palette.mode === 'dark'
+                    ? 'rgba(255,255,255,0.12)'
+                    : 'rgba(0,0,0,0.08)',
+                color: 'text.primary',
+              },
+            }}
+          >
+            <Close sx={{ fontSize: 18 }} />
           </IconButton>
         </Box>
-        <List sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, flex: 1, overflowY: 'auto' }}>
+
+        {/* Scrollable Navigation List */}
+        <List
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 0.5,
+            minHeight: 0,
+            flex: 1,
+            overflowY: 'auto',
+            px: 0.25,
+            py: 0.25,
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': { display: 'none' },
+          }}
+        >
           {navItems.map((item) => {
             const isActive = activePage === item;
             return (
-              <ListItem
-                button
+              <ListItemButton
                 key={item}
                 onClick={() => handleNavigation(item)}
                 sx={{
-                  borderRadius: '12px',
-                  bgcolor: isActive ? 'var(--accent-soft, #dcfce7)' : 'transparent',
-                  color: isActive ? 'var(--accent-dark, #16a34a)' : 'text.primary',
-                  fontWeight: isActive ? 800 : 600,
-                  py: 1,
-                  px: 1.5,
+                  borderRadius: '10px',
+                  bgcolor: isActive
+                    ? 'var(--accent-soft, rgba(34, 197, 94, 0.12))'
+                    : 'transparent',
+                  color: isActive
+                    ? 'var(--accent-dark, #16a34a)'
+                    : 'text.primary',
+                  fontWeight: isActive ? 700 : 550,
+                  py: 0.8,
+                  px: 1.25,
+                  transition: 'all 0.2s ease-in-out',
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.25,
+                  minHeight: 38,
                   '&:hover': {
-                    bgcolor: isActive ? 'var(--accent-soft, #dcfce7)' : 'rgba(148,163,184,0.08)',
+                    bgcolor: isActive
+                      ? 'var(--accent-soft, rgba(34, 197, 94, 0.16))'
+                      : (t) =>
+                          t.palette.mode === 'dark'
+                            ? 'rgba(255,255,255,0.06)'
+                            : 'rgba(0,0,0,0.04)',
+                    transform: 'translateX(3px)',
                   },
                 }}
               >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: isActive
+                      ? 'var(--accent-dark, #16a34a)'
+                      : 'text.secondary',
+                    fontSize: '18px',
+                    transition: 'color 0.2s ease',
+                  }}
+                >
+                  {getNavIcon(item)}
+                </Box>
                 <ListItemText
                   primary={item}
-                  primaryTypographyProps={{
-                    fontSize: 14,
-                    fontWeight: isActive ? 800 : 600,
+                  sx={{
+                    '& .MuiListItemText-primary': {
+                      fontSize: { xs: '13px', sm: '13.5px' },
+                      fontWeight: isActive ? 700 : 550,
+                      letterSpacing: '0.2px',
+                    },
                   }}
                 />
-              </ListItem>
+                {isActive && (
+                  <Box
+                    sx={{
+                      width: 5,
+                      height: 5,
+                      borderRadius: '50%',
+                      bgcolor: 'var(--accent-color, #22c55e)',
+                      boxShadow: '0 0 6px var(--accent-color, #22c55e)',
+                    }}
+                  />
+                )}
+              </ListItemButton>
             );
           })}
         </List>
-        <Box sx={{ pt: 2, borderTop: '1px solid rgba(148,163,184,0.15)', display: 'flex', flexDirection: 'column', gap: 1 }}>
+
+        {/* Footer Action Buttons */}
+        <Box
+          sx={{
+            pt: { xs: 1.25, sm: 1.5 },
+            mt: 0.5,
+            flexShrink: 0,
+            borderTop: (t) =>
+              t.palette.mode === 'dark'
+                ? '1px solid rgba(255, 255, 255, 0.1)'
+                : '1px solid rgba(148, 163, 184, 0.2)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1,
+          }}
+        >
           {onOpenResume && (
             <Button
               variant="outlined"
               fullWidth
-              size="small"
               onClick={() => {
                 setMobileOpen(false);
                 onOpenResume();
               }}
-              startIcon={<DescriptionRounded fontSize="small" />}
-              sx={{ borderRadius: '10px', textTransform: 'none', fontWeight: 700, borderColor: 'var(--accent-color, #22c55e)', color: 'var(--accent-dark, #16a34a)' }}
+              startIcon={<DescriptionRounded sx={{ fontSize: 16 }} />}
+              sx={{
+                minHeight: 38,
+                borderRadius: '10px',
+                textTransform: 'none',
+                fontWeight: 700,
+                fontSize: { xs: '12px', sm: '13px' },
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                borderColor: 'var(--accent-color, #22c55e)',
+                color: 'var(--accent-dark, #16a34a)',
+                boxSizing: 'border-box',
+                px: 1.25,
+                '&:hover': {
+                  borderColor: 'var(--accent-dark, #16a34a)',
+                  bgcolor: 'var(--accent-soft, rgba(34, 197, 94, 0.08))',
+                },
+                '& .MuiButton-startIcon': { mr: 0.75 },
+              }}
             >
               Interactive Resume
             </Button>
@@ -142,13 +345,111 @@ export function PortfolioNavigation({ onNavigate, activePage = 'Home', onOpenRes
           <Button
             variant="contained"
             fullWidth
-            size="small"
             onClick={() => handleNavigation('Contact')}
-            startIcon={<Send fontSize="small" />}
-            sx={{ borderRadius: '10px', textTransform: 'none', fontWeight: 700, bgcolor: 'var(--accent-color, #22c55e)', color: '#fff' }}
+            startIcon={<Send sx={{ fontSize: 16 }} />}
+            sx={{
+              minHeight: 38,
+              borderRadius: '10px',
+              textTransform: 'none',
+              fontWeight: 700,
+              fontSize: { xs: '12px', sm: '13px' },
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              bgcolor: 'var(--accent-color, #22c55e)',
+              color: '#ffffff',
+              boxSizing: 'border-box',
+              px: 1.25,
+              boxShadow: '0 3px 10px rgba(34, 197, 94, 0.3)',
+              '&:hover': {
+                bgcolor: 'var(--accent-dark, #16a34a)',
+                boxShadow: '0 5px 15px rgba(34, 197, 94, 0.4)',
+              },
+              '& .MuiButton-startIcon': { mr: 0.75 },
+            }}
           >
             Get In Touch
           </Button>
+
+          {/* Social Links Footer */}
+          <Box
+            sx={{
+              display: 'flex',
+              justify: 'center',
+              alignItems: 'center',
+              gap: 1.25,
+              pt: 0.25,
+            }}
+          >
+            {settings?.github && (
+              <IconButton
+                component="a"
+                href={settings.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                size="small"
+                aria-label="GitHub profile"
+                sx={{
+                  p: 0.5,
+                  color: 'text.secondary',
+                  '&:hover': { color: 'var(--accent-color, #22c55e)' },
+                }}
+              >
+                <GitHub sx={{ fontSize: 17 }} />
+              </IconButton>
+            )}
+            {settings?.linkedin && (
+              <IconButton
+                component="a"
+                href={settings.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                size="small"
+                aria-label="LinkedIn profile"
+                sx={{
+                  p: 0.5,
+                  color: 'text.secondary',
+                  '&:hover': { color: 'var(--accent-color, #22c55e)' },
+                }}
+              >
+                <LinkedIn sx={{ fontSize: 17 }} />
+              </IconButton>
+            )}
+            {settings?.instagram && (
+              <IconButton
+                component="a"
+                href={settings.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                size="small"
+                aria-label="Instagram profile"
+                sx={{
+                  p: 0.5,
+                  color: 'text.secondary',
+                  '&:hover': { color: 'var(--accent-color, #22c55e)' },
+                }}
+              >
+                <Instagram sx={{ fontSize: 17 }} />
+              </IconButton>
+            )}
+            {settings?.whatsapp && (
+              <IconButton
+                component="a"
+                href={buildWhatsAppLink(settings.whatsapp)}
+                target="_blank"
+                rel="noopener noreferrer"
+                size="small"
+                aria-label="WhatsApp"
+                sx={{
+                  p: 0.5,
+                  color: 'text.secondary',
+                  '&:hover': { color: 'var(--accent-color, #22c55e)' },
+                }}
+              >
+                <WhatsApp sx={{ fontSize: 17 }} />
+              </IconButton>
+            )}
+          </Box>
         </Box>
       </Drawer>
     </>
@@ -160,30 +461,6 @@ function buildWhatsAppLink(value) {
   if (!raw) return 'https://wa.me/919999999999';
   return `https://wa.me/${raw}`;
 }
-
-const fallbackFeaturedProjects = [
-  {
-    id: 'devflow',
-    title: 'DevFlow Suite',
-    category: 'Full Stack',
-    desc: 'Real-time kanban sprint management with WebSockets & React 19.',
-    tags: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
-  },
-  {
-    id: 'cloudscale',
-    title: 'CloudScale APM',
-    category: 'Backend / DevOps',
-    desc: 'Distributed observability dashboard with live throughput telemetry.',
-    tags: ['Next.js', 'TypeScript', 'Docker', 'Redis'],
-  },
-  {
-    id: 'nexusai',
-    title: 'Nexus Studio',
-    category: 'AI / Frontend',
-    desc: 'Multi-modal LLM canvas interface with voice interaction & streaming.',
-    tags: ['React', 'Tailwind', 'Python', 'FastAPI'],
-  },
-];
 
 const fallbackMarqueeReviews = [
   {
@@ -215,7 +492,6 @@ const fallbackMarqueeReviews = [
 export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler }) {
   const settings = useSiteSettings();
   const [roleIndex, setRoleIndex] = useState(0);
-  const [liveProjects, setLiveProjects] = useState([]);
   const [liveReviews, setLiveReviews] = useState([]);
 
   const heroRoles = Array.isArray(settings?.heroRoles) && settings.heroRoles.length
@@ -237,16 +513,6 @@ export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler })
     ? settings.heroTechStack
     : ['React', 'Node.js', 'TypeScript', 'MongoDB', 'AWS', 'Figma'];
 
-  const fetchLiveProjects = () => {
-    loadCachedProjects('?featured=true')
-      .then((data) => {
-        if (Array.isArray(data.projects) && data.projects.length > 0) {
-          setLiveProjects(data.projects);
-        }
-      })
-      .catch(() => {});
-  };
-
   const fetchLiveReviews = () => {
     loadReviews()
       .then((data) => {
@@ -258,34 +524,19 @@ export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler })
   };
 
   useEffect(() => {
-    fetchLiveProjects();
     fetchLiveReviews();
 
-    const handleProjectsUpdated = () => {
-      clearPublicDataCache();
-      fetchLiveProjects();
-    };
     const handleReviewsUpdated = () => {
       clearPublicDataCache();
       fetchLiveReviews();
     };
 
-    window.addEventListener('portfolio-projects-updated', handleProjectsUpdated);
     window.addEventListener('portfolio-reviews-updated', handleReviewsUpdated);
-    window.addEventListener('portfolio-settings-updated', handleProjectsUpdated);
 
     return () => {
-      window.removeEventListener('portfolio-projects-updated', handleProjectsUpdated);
       window.removeEventListener('portfolio-reviews-updated', handleReviewsUpdated);
-      window.removeEventListener('portfolio-settings-updated', handleProjectsUpdated);
     };
   }, []);
-
-  const featuredProjects = liveProjects.length > 0
-    ? liveProjects
-    : (Array.isArray(settings?.featuredProjects) && settings.featuredProjects.length > 0
-        ? settings.featuredProjects
-        : fallbackFeaturedProjects);
 
   const marqueeReviews = liveReviews.length > 0
     ? liveReviews
@@ -433,35 +684,6 @@ export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler })
         ))}
       </Box>
 
-      {/* Feature 1: Featured Projects Strip */}
-      <Box className="home-featured-strip">
-        <Typography className="home-featured-label">{'// SELECTED WORKS'}</Typography>
-        <Box className="home-featured-cards">
-          {featuredProjects.map((item) => (
-            <Box
-              key={item.id || item.title}
-              className="home-featured-card"
-              onClick={() => {
-                sounds.playClick();
-                if (onNavigate) onNavigate('Projects');
-              }}
-            >
-              <span className="home-featured-card-tag">{item.category}</span>
-              <Typography className="home-featured-card-title">{item.title}</Typography>
-              <Typography className="home-featured-card-desc">{item.desc}</Typography>
-              <Box className="home-featured-card-chips">
-                {item.tags?.map((t) => (
-                  <span key={t} className="home-featured-card-chip">{t}</span>
-                ))}
-              </Box>
-              <IconButton className="home-featured-card-arrow" size="small" aria-label="View project">
-                <NorthEast fontSize="inherit" />
-              </IconButton>
-            </Box>
-          ))}
-        </Box>
-      </Box>
-
       {/* Feature 2: Testimonials Marquee Strip */}
       <Box className="home-testimonials-marquee" aria-label="Client testimonials">
         <div className="marquee-label">{'// TRUSTED BY STARTUPS & TEAMS'}</div>
@@ -491,8 +713,9 @@ export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler })
         <Typography>
           Currently open to freelance contracts &amp; high-impact product sprints.
         </Typography>
-        <Chip
-          label="Explore Services"
+        <Button
+          type="button"
+          className="home-services-cta"
           size="small"
           onClick={() => {
             sounds.playClick();
@@ -505,7 +728,9 @@ export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler })
             cursor: 'pointer',
             '&:hover': { bgcolor: 'var(--accent-dark, #16a34a)' },
           }}
-        />
+        >
+          Explore Services
+        </Button>
       </Box>
 
       <Box className="home-scroll"><span>◉</span> Scroll to explore</Box>

@@ -596,7 +596,7 @@ export default function FeaturedWork({ onNavigate, onOpenResume, onOpenScheduler
   }, []);
 
   return (
-    <>
+    <Box className="projects-page">
       <PortfolioNavigation onNavigate={onNavigate} activePage="Projects" onOpenResume={onOpenResume} />
       
       <Box
@@ -736,7 +736,7 @@ export default function FeaturedWork({ onNavigate, onOpenResume, onOpenScheduler
         onClose={() => setSelectedProject(null)}
         fullWidth
         maxWidth="md"
-        PaperProps={{ sx: { m: { xs: 1, sm: 2 }, borderRadius: { xs: "18px", sm: "24px" }, overflow: "hidden", maxHeight: "94vh" } }}
+        slotProps={{ paper: { sx: { m: { xs: 1, sm: 2 }, borderRadius: { xs: "18px", sm: "24px" }, overflow: "hidden", maxHeight: "94vh" } } }}
       >
         <DialogContent className="project-dialog" sx={{ p: { xs: 2, sm: 3 } }}>
           <IconButton
@@ -781,6 +781,6 @@ export default function FeaturedWork({ onNavigate, onOpenResume, onOpenScheduler
           )}
         </DialogContent>
       </Dialog>
-    </>
+    </Box>
   );
 }

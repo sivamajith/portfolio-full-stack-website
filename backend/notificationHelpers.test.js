@@ -18,4 +18,7 @@ test('buildContactNotification returns a push payload for admin devices', () => 
   assert.equal(payload.data.type, 'contact_message');
   assert.equal(payload.data.messageId, '64b7a49d8f1d7d2f2c123456');
   assert.equal(payload.data.target, '/owner-console-7f3a9c');
+  assert.equal(payload.webpush.headers.TTL, '2419200');
+  assert.equal(payload.webpush.headers.Urgency, 'high');
+  assert.equal(payload.webpush.fcmOptions.link, '/owner-console-7f3a9c');
 });

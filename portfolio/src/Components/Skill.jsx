@@ -1791,6 +1791,47 @@ export default function SkillsSection({ onNavigate, onOpenResume }) {
           }
         }
 
+        @media (max-width: 599px) {
+          .matrix-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+          }
+          .matrix-card {
+            padding: 12px;
+            border-radius: 14px;
+          }
+          .matrix-card-header {
+            gap: 8px;
+            align-items: flex-start;
+          }
+          .matrix-card-icon-box {
+            width: 36px;
+            height: 36px;
+            font-size: 21px;
+            border-radius: 10px;
+          }
+          .matrix-title-row strong {
+            font-size: 13px;
+          }
+          .matrix-cat-tag {
+            font-size: 9px;
+            line-height: 1.3;
+          }
+          .matrix-card-desc {
+            font-size: 11px;
+            line-height: 1.4;
+            margin: 10px 0 12px;
+          }
+          .matrix-micro-tags {
+            gap: 4px;
+            margin-bottom: 0;
+          }
+          .micro-tag {
+            font-size: 8.5px;
+            padding: 2px 5px;
+          }
+        }
+
         /* Dark Mode */
         .dark-mode .skills-page {
           color: #f1f5f9;

@@ -66,7 +66,7 @@
 }
 
 /* Admin Dashboard Styles */
-.admin-shell { min-height: 100vh; display: flex; background: linear-gradient(135deg, #f8fafc 0%, #eef4ff 32%, #f6f7fb 100%); color: #14231b; }
+.admin-shell { min-height: 100vh; display: flex; min-width: 0; background: linear-gradient(135deg, #f8fafc 0%, #eef4ff 32%, #f6f7fb 100%); color: #14231b; }
 .admin-sidebar { width: 260px; display: flex; flex-direction: column; flex: 0 0 260px; padding: 28px 16px 20px; color: #dce9df; background: linear-gradient(180deg, #0f172a 0%, #111827 100%); border-right: 1px solid rgba(148, 163, 184, 0.18); box-shadow: 18px 0 40px rgba(15, 23, 42, 0.08); }
 .admin-brand { display: flex; align-items: center; gap: 12px; padding: 0 12px 35px; }
 .admin-brand-mark { display: grid; place-items: center; width: 36px; height: 36px; color: #ffffff; background: linear-gradient(135deg, var(--accent-color, #22c55e) 0%, var(--accent-dark, #16a34a) 100%); border-radius: 12px; font-size: 18px; font-weight: 900; box-shadow: 0 12px 24px rgba(34, 197, 94, 0.28); }
@@ -82,7 +82,7 @@
 .admin-side-nav small { margin-left: auto; color: rgba(255,255,255,0.5); font-size: 10px; }
 .admin-sidebar-footer { display: flex; align-items: center; gap: 8px; margin-top: auto; padding: 18px 12px 0; border-top: 1px solid rgba(148, 163, 184, 0.14); color: rgba(255,255,255,0.75); font-size: 11px; }
 .admin-status-dot { width: 8px; height: 8px; background: var(--accent-color, #22c55e); border-radius: 50%; box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.16); }
-.admin-main { flex: 1; min-width: 0; padding: 38px clamp(24px, 4vw, 64px); background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(248,250,252,0.95) 100%); }
+.admin-main { flex: 1; min-width: 0; max-width: 100%; padding: 38px clamp(24px, 4vw, 64px); background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(248,250,252,0.95) 100%); }
 .admin-header { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1280px; margin: 0 auto 26px; gap: 24px; }
 .admin-header h3 { margin: 8px 0 6px; color: #0f172a; font-size: clamp(28px, 3vw, 42px); font-weight: 800; letter-spacing: -1.5px; }
 .admin-header p, .admin-login > p { color: #475569; margin: 0; font-size: 13px; }
@@ -105,7 +105,7 @@
 .admin-tabs .MuiTabs-flexContainer { gap: 10px; }
 .admin-tabs .MuiTab-root { min-height: 42px; border-radius: 10px 10px 0 0; font-weight: 700; text-transform: none; color: #475569; }
 .admin-tabs .Mui-selected { color: #0f172a !important; background: rgba(255,255,255,0.8); }
-.admin-content { display: grid; grid-template-columns: minmax(290px, 380px) 1fr; gap: 20px; padding-top: 6px; }
+.admin-content { display: grid; grid-template-columns: minmax(290px, 380px) minmax(0, 1fr); gap: 20px; padding-top: 6px; min-width: 0; }
 .admin-form, .admin-settings, .admin-list { display: grid; gap: 14px; align-content: start; padding: 22px; background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(248,250,252,0.9) 100%); border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 18px; box-shadow: 0 18px 38px rgba(15, 23, 42, 0.05); }
 .admin-settings-help { color: #64748b; font-size: 12px; line-height: 1.5; }
 .admin-list h5, .admin-form h5 { margin: 0 0 4px; color: #0f172a; font-weight: 800; }
@@ -131,8 +131,68 @@
 .admin-card { padding: 24px; background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.92) 100%); border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 18px; box-shadow: 0 18px 38px rgba(15, 23, 42, 0.04); }
 .admin-section-header { margin-bottom: 24px; }
 .admin-section-header h5 { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
-.admin-overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+.admin-overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; min-width: 0; }
 .admin-badge-count { margin-left: auto; background: #ef4444; color: #fff; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 10px; }
-@media (max-width: 900px) { .admin-sidebar { width: 74px; flex-basis: 74px; padding: 22px 10px; } .admin-brand { justify-content: center; padding: 0 0 35px; } .admin-brand > div, .admin-sidebar-label, .admin-side-nav span, .admin-side-nav small, .admin-sidebar-footer, .admin-badge-count { display: none; } .admin-side-nav button { justify-content: center; padding: 13px 8px; } .admin-main { padding: 30px 20px; } }
-@media (max-width: 700px) { .admin-header { flex-direction: column; } .admin-stats { grid-template-columns: repeat(2, 1fr); } .admin-content { grid-template-columns: 1fr; } .admin-form, .admin-settings, .admin-list, .admin-card { padding: 17px; } }
-@media (max-width: 430px) { .admin-main { padding: 24px 14px; } .admin-stats { gap: 8px; } .admin-stats > div { min-height: 100px; padding: 12px; } .admin-stat-icon { width: 31px; height: 31px; } .admin-stats strong { font-size: 24px; } .admin-stats small { display: none; } }
+.admin-main .MuiTextField-root, .admin-main .MuiFormControl-root { max-width: 100%; min-width: 0; }
+.admin-main .MuiInputBase-root, .admin-main input, .admin-main textarea { min-width: 0; max-width: 100%; }
+.admin-main .MuiButton-root { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+.admin-main .admin-wide, .admin-main .admin-card, .admin-main .admin-form, .admin-main .admin-settings, .admin-main .admin-list { min-width: 0; }
+
+@media (max-width: 900px) {
+  .admin-sidebar { width: 220px; flex-basis: 220px; padding: 22px 12px; }
+  .admin-brand { padding: 0 8px 24px; }
+  .admin-sidebar-label { padding-left: 8px; }
+  .admin-side-nav button { padding: 11px 10px; }
+  .admin-main { padding: 30px 20px; }
+  .admin-header h3 { font-size: clamp(25px, 4vw, 36px); letter-spacing: -0.8px; }
+}
+
+@media (max-width: 700px) {
+  .admin-shell { display: block; }
+  .admin-sidebar { width: 100%; flex: none; padding: 14px 14px 16px; border-right: 0; border-bottom: 1px solid rgba(148, 163, 184, 0.18); box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08); }
+  .admin-brand { padding: 0 4px 16px; }
+  .admin-sidebar-label { padding: 0 4px 8px; }
+  .admin-side-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .admin-side-nav button { min-width: 0; padding: 10px 9px; font-size: 12px; }
+  .admin-side-nav button.active { box-shadow: inset 3px 0 #34d399; }
+  .admin-sidebar-footer { margin-top: 14px; padding: 12px 4px 0; }
+  .admin-main { padding: 24px 16px; }
+  .admin-header { flex-direction: column; gap: 16px; }
+  .admin-header-actions { width: 100%; flex-wrap: wrap; }
+  .admin-header-actions .MuiButton-root { flex: 1 1 170px; }
+  .admin-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .admin-content { grid-template-columns: minmax(0, 1fr); }
+  .admin-form, .admin-settings, .admin-list, .admin-card { padding: 17px; }
+  .admin-main [style*="grid-template-columns"] { grid-template-columns: minmax(0, 1fr) !important; }
+  .admin-main [style*="grid-template-columns"] > * { min-width: 0; }
+  .admin-row { align-items: flex-start; flex-wrap: wrap; }
+  .admin-row > div:last-child { margin-left: auto; }
+  .admin-item-title { align-items: flex-start; flex-wrap: wrap; }
+  .admin-section-header { margin-bottom: 18px; }
+  .admin-section-header h5 { font-size: 20px; line-height: 1.25; }
+  .admin-login-card { padding: 28px 20px; }
+  .admin-overview-grid { grid-template-columns: minmax(0, 1fr); }
+  .MuiDialog-paper { max-width: calc(100vw - 24px) !important; margin: 12px !important; }
+  .MuiDialogActions-root { flex-wrap: wrap; }
+  .MuiDialogActions-root .MuiButton-root { flex: 1 1 120px; }
+}
+
+@media (max-width: 430px) {
+  .admin-sidebar { padding-inline: 10px; }
+  .admin-side-nav { grid-template-columns: minmax(0, 1fr); }
+  .admin-main { padding: 20px 12px; }
+  .admin-header h3 { font-size: 25px; }
+  .admin-header p { font-size: 12px; line-height: 1.5; }
+  .admin-stats { gap: 8px; }
+  .admin-stats > div { min-height: 96px; padding: 11px; gap: 8px; }
+  .admin-stat-icon { width: 31px; height: 31px; flex: 0 0 31px; }
+  .admin-stats strong { font-size: 23px; }
+  .admin-stats span { font-size: 10px; }
+  .admin-stats small { display: none; }
+  .admin-card, .admin-form, .admin-settings, .admin-list { border-radius: 14px; }
+  .admin-header-actions .MuiButton-root { flex-basis: 100%; }
+  .admin-main .MuiFormControlLabel-root { align-items: flex-start; margin-inline: 0; }
+  .admin-main .MuiFormControlLabel-label { font-size: 12px; line-height: 1.4; }
+  .admin-main .MuiStack-root > .MuiBox-root { min-width: 0; }
+  .admin-notice { font-size: 12px; overflow-wrap: anywhere; }
+}

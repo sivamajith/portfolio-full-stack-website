@@ -17,6 +17,10 @@ function buildContactNotification(contactMessage) {
       click_action: targetPath,
     },
     webpush: {
+      headers: {
+        TTL: '2419200',
+        Urgency: 'high',
+      },
       fcmOptions: {
         link: targetPath,
       },

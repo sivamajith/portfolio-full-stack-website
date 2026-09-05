@@ -161,13 +161,15 @@ END:VCALENDAR`;
       onClose={onClose}
       fullWidth
       maxWidth="md"
-      PaperProps={{
-        sx: {
-          borderRadius: { xs: '20px', sm: '24px' },
-          overflow: 'hidden',
-          boxShadow: '0 30px 80px rgba(15, 23, 42, 0.4)',
-          m: { xs: 1.5, sm: 3 },
-          maxHeight: { xs: '92vh', sm: '90vh' },
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: { xs: '20px', sm: '24px' },
+            overflow: 'hidden',
+            boxShadow: '0 30px 80px rgba(15, 23, 42, 0.4)',
+            m: { xs: 1.5, sm: 3 },
+            maxHeight: { xs: '92vh', sm: '90vh' },
+          },
         },
       }}
     >
