@@ -103,6 +103,7 @@ export function PortfolioNavigation({ onNavigate, activePage = 'Home', onOpenRes
         anchor="right"
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
+        sx={{ zIndex: 12000 }}
         slotProps={{
           paper: {
             sx: {

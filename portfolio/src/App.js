@@ -23,7 +23,6 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
-import Home from './Components/Home';
 import Home, { PortfolioNavigation } from './Components/Home';
 import About from './Components/About';
 import Skills from './Components/Skill';
@@ -172,6 +171,46 @@ export default function App() {
     };
   }, []);
 
+  // Track active section on mobile scroll
+  useEffect(() => {
+    if (!isMobileSinglePage) return;
+
+    const sections = [
+      { id: 'Home', selector: '.mobile-all-pages .home-page' },
+      { id: 'About', selector: '.mobile-all-pages .about-page' },
+      { id: 'Skills', selector: '.mobile-all-pages .skills-page' },
+      { id: 'Projects', selector: '.mobile-all-pages .projects-page, .mobile-all-pages .projects-section' },
+      { id: 'Experience', selector: '.mobile-all-pages .experience-page' },
+      { id: 'Services', selector: '.mobile-all-pages .services-page' },
+      { id: 'Contact', selector: '.mobile-all-pages .contact-page' },
+    ];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const matched = sections.find((s) => entry.target.matches(s.selector));
+            if (matched) {
+              setCurrentPage(matched.id);
+            }
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '-20% 0px -70% 0px',
+        threshold: 0,
+      }
+    );
+
+    sections.forEach(({ selector }) => {
+      const el = document.querySelector(selector);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [isMobileSinglePage]);
+
   const navigate = (page) => {
     sounds.playClick();
     startTransition(() => setCurrentPage(page));
@@ -182,7 +221,7 @@ export default function App() {
         Home: '.mobile-all-pages .home-page',
         About: '.mobile-all-pages .about-page',
         Skills: '.mobile-all-pages .skills-page',
-        Projects: '.mobile-all-pages .projects-section',
+        Projects: '.mobile-all-pages .projects-page, .mobile-all-pages .projects-section',
         Experience: '.mobile-all-pages .experience-page',
         Services: '.mobile-all-pages .services-page',
         Contact: '.mobile-all-pages .contact-page',
@@ -312,12 +351,10 @@ export default function App() {
             position: 'fixed',
             top: 0,
             left: 0,
-            zIndex: 9999,
+            zIndex: 10001,
           }}
         />
 
-        {!isMobileSinglePage && <Box className="desktop-page">{page}</Box>}
-        {isMobileSinglePage && mobilePages}
         <PortfolioNavigation
           onNavigate={navigate}
           activePage={currentPage}
@@ -325,8 +362,8 @@ export default function App() {
           onOpenScheduler={() => setSchedulerOpen(true)}
         />
 
-        <Box className="desktop-page">{page}</Box>
-        {mobilePages}
+        {!isMobileSinglePage && <Box className="desktop-page">{page}</Box>}
+        {isMobileSinglePage && mobilePages}
 
         {/* Global Footer */}
         <footer className="site-footer">
