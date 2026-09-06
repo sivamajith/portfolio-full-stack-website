@@ -485,7 +485,7 @@ export default function Admin() {
           console.log('Admin foreground notification received:', title, body);
           new Notification(title, {
             body,
-            icon: '/favicon.ico',
+            icon: '/logo.png',
           });
         }
       }

@@ -27,8 +27,8 @@ messaging.onBackgroundMessage((payload) => {
 
   const notificationOptions = {
     body,
-    icon: payload?.notification?.icon || '/favicon.ico',
-    badge: '/favicon.ico',
+    icon: payload?.notification?.icon || 'https://portfolio-full-stack-website-coral.vercel.app/logo.png',
+    badge: 'https://portfolio-full-stack-website-coral.vercel.app/logo.png',
     data: { url: clickAction },
     tag: payload?.data?.messageId || 'portfolio-notification',
     renotify: true,

@@ -7,6 +7,7 @@ function buildContactNotification(contactMessage) {
     notification: {
       title,
       body: `${contactMessage.name}: ${contactMessage.subject}`,
+       
     },
     data: {
       type: 'contact_message',
@@ -25,8 +26,8 @@ function buildContactNotification(contactMessage) {
         link: targetPath,
       },
       notification: {
-        icon: '/favicon.ico',
-        badge: '/favicon.ico',
+        icon: '/logo.png',
+        badge: '/logo.png',
       },
     },
   };
