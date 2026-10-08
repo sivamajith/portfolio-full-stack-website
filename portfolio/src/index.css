@@ -2693,4 +2693,24 @@ img, svg { max-width: 100%; }
   background: rgba(15, 31, 25, .7);
   border-color: rgba(134, 239, 172, .15);
 }
+
+@media (max-width: 650px) {
+  .home-proof-row {
+    flex-wrap: nowrap;
+    gap: clamp(6px, 2vw, 12px);
+  }
+
+  .home-proof-row > div {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 10px 6px;
+  }
+
+  .home-proof-row span {
+    font-size: clamp(7px, 2vw, 10px);
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+}
 .dark-mode .project-stat-label { color: #a8b4ae; }
