@@ -16,7 +16,7 @@ import {
   Flame,
   Check,
 } from 'lucide-react';
-import { PortfolioNavigation } from './Home';
+import { PortfolioNavigation } from './PortfolioNavigation';
 import useSiteSettings from '../hooks/useSiteSettings';
 import sounds from '../utils/SoundManager';
 

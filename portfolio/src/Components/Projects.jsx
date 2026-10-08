@@ -21,9 +21,10 @@ import CodeRoundedIcon from "@mui/icons-material/CodeRounded";
 import LaunchRoundedIcon from "@mui/icons-material/LaunchRounded";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { PortfolioNavigation } from "./Home";
+import { PortfolioNavigation } from "./PortfolioNavigation";
 import sounds from "../utils/SoundManager";
 import { loadProjects as loadCachedProjects, clearPublicDataCache } from "../utils/publicData";
+import { LazyImage } from "./LazyImage";
 
 const COLORS = {
   green: "var(--accent-color, #22c55e)",
@@ -254,10 +255,10 @@ function Mockup({ type, project }) {
   if (project?.image) {
     return (
       <Box sx={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden', background: '#f8fafc' }}>
-        <img
+        <LazyImage
           src={project.image}
           alt={project.imageAlt || project.title || 'Project preview'}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
       </Box>
     );

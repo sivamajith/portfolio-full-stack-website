@@ -2,9 +2,10 @@ import React from 'react';
 import { Box, Button, Container, Dialog, DialogContent, IconButton, Typography } from '@mui/material';
 import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { PortfolioNavigation } from './Home';
+import { PortfolioNavigation } from './PortfolioNavigation';
 import useSiteSettings from '../hooks/useSiteSettings';
 import sounds from '../utils/SoundManager';
+import { LazyImage } from './LazyImage';
 
 const timelineData = [
   { year: '2021', title: 'Started Journey', subtitle: 'Learned HTML, CSS, JavaScript, and Core CS Algorithms' },
@@ -234,12 +235,13 @@ const About = ({ onNavigate, onOpenResume }) => {
                             sx={{ display: 'inline-block', lineHeight: 0, position: 'relative', border: 0, p: 0, bgcolor: 'transparent', cursor: 'pointer' }}
                           >
                             {ach.certificateType?.startsWith('image/') || ach.certificateThumbnailUrl ? (
-                              <Box
-                                component="img"
-                                src={ach.certificateThumbnailUrl || getCertificateThumbnailUrl(ach.certificateUrl, ach.certificateType)}
-                                alt={`${ach.title} certificate`}
-                                sx={{ display: 'block', width: 180, height: 110, objectFit: 'cover', borderRadius: 1.5, border: '1px solid rgba(148, 163, 184, 0.25)', boxShadow: '0 4px 12px rgba(15, 23, 42, 0.08)' }}
-                              />
+                              <Box sx={{ width: 180, height: 110, borderRadius: 1.5, overflow: 'hidden', border: '1px solid rgba(148, 163, 184, 0.25)', boxShadow: '0 4px 12px rgba(15, 23, 42, 0.08)' }}>
+                                <LazyImage
+                                  src={ach.certificateThumbnailUrl || getCertificateThumbnailUrl(ach.certificateUrl, ach.certificateType)}
+                                  alt={`${ach.title} certificate`}
+                                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                />
+                              </Box>
                             ) : (
                               <Box sx={{ width: 180, height: 110, display: 'grid', placeItems: 'center', borderRadius: 1.5, border: '1px solid rgba(148, 163, 184, 0.25)', bgcolor: '#f8fafc', color: '#475569', fontSize: 22, fontWeight: 800 }}>
                                 PDF

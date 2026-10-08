@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { LazyImage } from './LazyImage';
 import {
   Box,
   Button,
@@ -844,7 +845,13 @@ export default function Admin() {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <Box className="admin-brand">
-          <span className="admin-brand-mark">{settings?.brandLogo || 'Y'}</span>
+          <span className="admin-brand-mark">
+            {settings?.profileImage ? (
+              <img src={settings.profileImage} alt={`${settings?.name || 'Profile'} profile`} />
+            ) : (
+              settings?.brandLogo || 'Y'
+            )}
+          </span>
           <Box>
             <strong>{settings?.name || 'Owner Portfolio'}</strong>
             <span>Admin Control Center</span>
@@ -1020,7 +1027,7 @@ export default function Admin() {
                     }}
                   >
                     {settings.profileImage ? (
-                      <img src={settings.profileImage} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <LazyImage src={settings.profileImage} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
                       <Typography variant="h4" color="text.secondary">{settings.name?.[0] || 'Y'}</Typography>
                     )}
@@ -1121,7 +1128,7 @@ export default function Admin() {
                   }}
                 >
                   {settings.profileImage ? (
-                    <img src={settings.profileImage} alt="Profile preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <LazyImage src={settings.profileImage} alt="Profile preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
                     <Typography variant="caption" color="text.secondary" align="center" sx={{ px: 1 }}>
                       No image selected (Default avatar used)
@@ -1590,12 +1597,26 @@ export default function Admin() {
 
               <Stack spacing={2} sx={{ mb: 2 }}>
                 {(settings.aboutTimeline || []).map((milestone, idx) => (
-                  <Box key={idx} sx={{ p: 2, border: '1px solid rgba(0,0,0,0.1)', borderRadius: 2, display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                  <Box
+                    key={idx}
+                    sx={{
+                      p: 2,
+                      border: '1px solid rgba(148, 163, 184, 0.2)',
+                      borderRadius: 2,
+                      bgcolor: '#ffffff',
+                      display: 'grid',
+                      gridTemplateColumns: {
+                        xs: '100px 1fr auto',
+                        sm: '110px 220px 1fr auto',
+                      },
+                      gap: 1.5,
+                      alignItems: 'center',
+                    }}
+                  >
                     <TextField
                       label="Year"
                       size="small"
                       value={milestone.year}
-                      sx={{ width: 110 }}
                       onChange={(e) => {
                         const updated = [...settings.aboutTimeline];
                         updated[idx] = { ...updated[idx], year: e.target.value };
@@ -1606,7 +1627,9 @@ export default function Admin() {
                       label="Milestone Title"
                       size="small"
                       value={milestone.title}
-                      sx={{ width: 220 }}
+                      sx={{
+                        gridColumn: { xs: '2 / 3', sm: 'auto' },
+                      }}
                       onChange={(e) => {
                         const updated = [...settings.aboutTimeline];
                         updated[idx] = { ...updated[idx], title: e.target.value };
@@ -1618,6 +1641,9 @@ export default function Admin() {
                       size="small"
                       value={milestone.subtitle}
                       fullWidth
+                      sx={{
+                        gridColumn: { xs: '1 / -1', sm: 'auto' },
+                      }}
                       onChange={(e) => {
                         const updated = [...settings.aboutTimeline];
                         updated[idx] = { ...updated[idx], subtitle: e.target.value };
@@ -1626,9 +1652,14 @@ export default function Admin() {
                     />
                     <IconButton
                       color="error"
+                      size="small"
                       onClick={() => {
                         const updated = settings.aboutTimeline.filter((_, i) => i !== idx);
                         setSettings({ ...settings, aboutTimeline: updated });
+                      }}
+                      sx={{
+                        gridColumn: { xs: '3 / 4', sm: 'auto' },
+                        justifySelf: 'flex-end',
                       }}
                     >
                       <DeleteOutlineRoundedIcon />
@@ -1668,12 +1699,26 @@ export default function Admin() {
                   { icon: '⚡', name: 'Performance First', desc: 'Every millisecond matters. Zero-lag architectures and lean bundles.' },
                   { icon: '💎', name: 'Craftsmanship & Clean Code', desc: 'Self-documenting TypeScript and comprehensive test coverage.' },
                 ]).map((val, vIdx) => (
-                  <Box key={vIdx} sx={{ p: 2, border: '1px solid rgba(0,0,0,0.1)', borderRadius: 2, display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
+                  <Box
+                    key={vIdx}
+                    sx={{
+                      p: 2,
+                      border: '1px solid rgba(148, 163, 184, 0.2)',
+                      borderRadius: 2,
+                      bgcolor: '#ffffff',
+                      display: 'grid',
+                      gridTemplateColumns: {
+                        xs: '80px 1fr auto',
+                        sm: '80px 220px 1fr auto',
+                      },
+                      gap: 1.5,
+                      alignItems: 'center',
+                    }}
+                  >
                     <TextField
                       label="Icon Emoji"
                       size="small"
                       value={val.icon || '⚡'}
-                      sx={{ width: 80 }}
                       onChange={(e) => {
                         const current = [...(settings.values || [])];
                         current[vIdx] = { ...current[vIdx], icon: e.target.value };
@@ -1684,7 +1729,9 @@ export default function Admin() {
                       label="Principle Name"
                       size="small"
                       value={val.name || ''}
-                      sx={{ width: 220 }}
+                      sx={{
+                        gridColumn: { xs: '2 / 3', sm: 'auto' },
+                      }}
                       onChange={(e) => {
                         const current = [...(settings.values || [])];
                         current[vIdx] = { ...current[vIdx], name: e.target.value };
@@ -1696,6 +1743,9 @@ export default function Admin() {
                       size="small"
                       value={val.desc || ''}
                       fullWidth
+                      sx={{
+                        gridColumn: { xs: '1 / -1', sm: 'auto' },
+                      }}
                       onChange={(e) => {
                         const current = [...(settings.values || [])];
                         current[vIdx] = { ...current[vIdx], desc: e.target.value };
@@ -1704,9 +1754,14 @@ export default function Admin() {
                     />
                     <IconButton
                       color="error"
+                      size="small"
                       onClick={() => {
                         const current = settings.values || [];
                         setSettings({ ...settings, values: current.filter((_, i) => i !== vIdx) });
+                      }}
+                      sx={{
+                        gridColumn: { xs: '3 / 4', sm: 'auto' },
+                        justifySelf: 'flex-end',
                       }}
                     >
                       <DeleteOutlineRoundedIcon />
@@ -1747,58 +1802,99 @@ export default function Admin() {
                   { icon: '🏆', title: 'AWS Certified Developer', issuer: 'Amazon Web Services', year: '2024' },
                   { icon: '⚛️', title: 'Advanced React Professional', issuer: 'Meta / Coursera', year: '2023' },
                 ]).map((ach, aIdx) => (
-                  <Box key={aIdx} sx={{ p: 2, border: '1px solid rgba(0,0,0,0.1)', borderRadius: 2, display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
-                    <TextField
-                      label="Emoji"
-                      size="small"
-                      value={ach.icon || '🏆'}
-                      sx={{ width: 80 }}
-                      onChange={(e) => {
-                        const current = [...(settings.achievements || [])];
-                        current[aIdx] = { ...current[aIdx], icon: e.target.value };
-                        setSettings({ ...settings, achievements: current });
+                  <Box
+                    key={aIdx}
+                    sx={{
+                      p: 2,
+                      border: '1px solid rgba(148, 163, 184, 0.2)',
+                      borderRadius: 2,
+                      bgcolor: '#ffffff',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 1.5,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: {
+                          xs: '70px 1fr auto',
+                          sm: '80px 1.5fr 1fr 90px auto',
+                        },
+                        gap: 1.5,
+                        alignItems: 'center',
                       }}
-                    />
-                    <TextField
-                      label="Certificate / Award Title"
-                      size="small"
-                      value={ach.title || ''}
-                      sx={{ flex: 1 }}
-                      onChange={(e) => {
-                        const current = [...(settings.achievements || [])];
-                        current[aIdx] = { ...current[aIdx], title: e.target.value };
-                        setSettings({ ...settings, achievements: current });
-                      }}
-                    />
-                    <TextField
-                      label="Issuer Organization"
-                      size="small"
-                      value={ach.issuer || ''}
-                      sx={{ width: 200 }}
-                      onChange={(e) => {
-                        const current = [...(settings.achievements || [])];
-                        current[aIdx] = { ...current[aIdx], issuer: e.target.value };
-                        setSettings({ ...settings, achievements: current });
-                      }}
-                    />
-                    <TextField
-                      label="Year"
-                      size="small"
-                      value={ach.year || ''}
-                      sx={{ width: 90 }}
-                      onChange={(e) => {
-                        const current = [...(settings.achievements || [])];
-                        current[aIdx] = { ...current[aIdx], year: e.target.value };
-                        setSettings({ ...settings, achievements: current });
-                      }}
-                    />
-                    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                    >
+                      <TextField
+                        label="Emoji"
+                        size="small"
+                        value={ach.icon || '🏆'}
+                        onChange={(e) => {
+                          const current = [...(settings.achievements || [])];
+                          current[aIdx] = { ...current[aIdx], icon: e.target.value };
+                          setSettings({ ...settings, achievements: current });
+                        }}
+                      />
+                      <TextField
+                        label="Certificate / Award Title"
+                        size="small"
+                        value={ach.title || ''}
+                        onChange={(e) => {
+                          const current = [...(settings.achievements || [])];
+                          current[aIdx] = { ...current[aIdx], title: e.target.value };
+                          setSettings({ ...settings, achievements: current });
+                        }}
+                      />
+                      <TextField
+                        label="Issuer Organization"
+                        size="small"
+                        value={ach.issuer || ''}
+                        sx={{
+                          gridColumn: { xs: '1 / -1', sm: 'auto' },
+                        }}
+                        onChange={(e) => {
+                          const current = [...(settings.achievements || [])];
+                          current[aIdx] = { ...current[aIdx], issuer: e.target.value };
+                          setSettings({ ...settings, achievements: current });
+                        }}
+                      />
+                      <TextField
+                        label="Year"
+                        size="small"
+                        value={ach.year || ''}
+                        sx={{
+                          gridColumn: { xs: '1 / 2', sm: 'auto' },
+                        }}
+                        onChange={(e) => {
+                          const current = [...(settings.achievements || [])];
+                          current[aIdx] = { ...current[aIdx], year: e.target.value };
+                          setSettings({ ...settings, achievements: current });
+                        }}
+                      />
+                      <IconButton
+                        color="error"
+                        size="small"
+                        onClick={() => {
+                          const current = settings.achievements || [];
+                          setSettings({ ...settings, achievements: current.filter((_, i) => i !== aIdx) });
+                        }}
+                        sx={{
+                          gridColumn: { xs: '3 / 4', sm: 'auto' },
+                          justifySelf: 'flex-end',
+                        }}
+                      >
+                        <DeleteOutlineRoundedIcon />
+                      </IconButton>
+                    </Box>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', pt: 0.5 }}>
                       <Button
                         component="label"
                         size="small"
                         variant="outlined"
                         disabled={uploadingCertificateIndex === aIdx}
                         startIcon={uploadingCertificateIndex === aIdx ? <CircularProgress size={16} /> : <CloudUploadRoundedIcon />}
+                        sx={{ textTransform: 'none', whiteSpace: 'nowrap' }}
                       >
                         {uploadingCertificateIndex === aIdx ? 'Uploading...' : 'Upload Certificate'}
                         <input
@@ -1809,20 +1905,21 @@ export default function Admin() {
                         />
                       </Button>
                       {ach.certificateUrl && (
-                        <Button component="a" href={ach.certificateUrl} target="_blank" rel="noreferrer" size="small" startIcon={<LaunchRoundedIcon />}>
+                        <Button
+                          component="a"
+                          href={ach.certificateUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          size="small"
+                          variant="outlined"
+                          color="success"
+                          startIcon={<LaunchRoundedIcon />}
+                          sx={{ textTransform: 'none', whiteSpace: 'nowrap' }}
+                        >
                           View Certificate
                         </Button>
                       )}
                     </Box>
-                    <IconButton
-                      color="error"
-                      onClick={() => {
-                        const current = settings.achievements || [];
-                        setSettings({ ...settings, achievements: current.filter((_, i) => i !== aIdx) });
-                      }}
-                    >
-                      <DeleteOutlineRoundedIcon />
-                    </IconButton>
                   </Box>
                 ))}
               </Stack>
@@ -2138,7 +2235,7 @@ export default function Admin() {
 
                   {project.image ? (
                     <Box sx={{ width: '100%', maxWidth: 280, height: 150, borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(148,163,184,0.2)', background: '#f8fafc' }}>
-                      <img src={project.image} alt={project.imageAlt || project.title || 'Project preview'} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                      <LazyImage src={project.image} alt={project.imageAlt || project.title || 'Project preview'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </Box>
                   ) : (
                     <Box sx={{ width: '100%', maxWidth: 280, height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px', border: '1px dashed rgba(148,163,184,0.5)', color: 'text.secondary', background: '#fff', fontSize: 12 }}>
@@ -2387,12 +2484,12 @@ export default function Admin() {
                   <Box
                     key={idx}
                     sx={{
-                      p: 2.5,
+                      p: { xs: 1.5, sm: 2.5 },
                       border: '1px solid rgba(148, 163, 184, 0.25)',
                       borderRadius: 2.5,
                       bgcolor: '#fff',
                       display: 'flex',
-                      gap: 2,
+                      gap: { xs: 1.5, sm: 2 },
                       alignItems: 'flex-start',
                       flexWrap: 'wrap',
                       position: 'relative',
@@ -2401,7 +2498,14 @@ export default function Admin() {
                     <IconButton
                       color="error"
                       size="small"
-                      sx={{ position: 'absolute', top: 8, right: 8 }}
+                      sx={{
+                        position: { xs: 'static', sm: 'absolute' },
+                        top: 8,
+                        right: 8,
+                        order: { xs: -1, sm: 0 },
+                        alignSelf: { xs: 'flex-end', sm: 'auto' },
+                        ml: { xs: 'auto', sm: 0 },
+                      }}
                       onClick={() => {
                         const updated = settings.experienceJourney.filter((_, i) => i !== idx);
                         setSettings({ ...settings, experienceJourney: updated });
@@ -2414,7 +2518,7 @@ export default function Admin() {
                       label="Year"
                       size="small"
                       value={step.year}
-                      sx={{ width: 110 }}
+                      sx={{ width: { xs: '100%', sm: 110 }, maxWidth: '100%' }}
                       onChange={(e) => {
                         const updated = [...settings.experienceJourney];
                         updated[idx] = { ...updated[idx], year: e.target.value };
@@ -2426,7 +2530,7 @@ export default function Admin() {
                       label="Role / Title"
                       size="small"
                       value={step.title}
-                      sx={{ width: 220 }}
+                      sx={{ width: { xs: '100%', sm: 220 }, maxWidth: '100%' }}
                       onChange={(e) => {
                         const updated = [...settings.experienceJourney];
                         updated[idx] = { ...updated[idx], title: e.target.value };
@@ -2440,7 +2544,7 @@ export default function Admin() {
                       label="Milestone Icon"
                       size="small"
                       value={step.icon || 'code'}
-                      sx={{ width: 140 }}
+                      sx={{ width: { xs: '100%', sm: 140 }, maxWidth: '100%' }}
                       onChange={(e) => {
                         const updated = [...settings.experienceJourney];
                         updated[idx] = { ...updated[idx], icon: e.target.value };

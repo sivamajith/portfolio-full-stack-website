@@ -6,7 +6,7 @@ import PhoneInTalkOutlinedIcon from '@mui/icons-material/PhoneInTalkOutlined';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import { PortfolioNavigation } from './Home';
+import { PortfolioNavigation } from './PortfolioNavigation';
 import useSiteSettings from '../hooks/useSiteSettings';
 import sounds from '../utils/SoundManager';
 
@@ -458,28 +458,6 @@ export default function Contact({ onNavigate, prefillSpec, onOpenResume }) {
         </div>
       </section>
 
-      {/* Feature 11: Social Proof & Reliability Counters */}
-      <section className="contact-proof-section">
-        <div className="contact-proof-grid">
-          <div className="contact-proof-card">
-            <Typography className="contact-proof-number">50+</Typography>
-            <Typography className="contact-proof-label">Client Inquiries Solved</Typography>
-          </div>
-          <div className="contact-proof-card">
-            <Typography className="contact-proof-number">100%</Typography>
-            <Typography className="contact-proof-label">Positive Feedback Score</Typography>
-          </div>
-          <div className="contact-proof-card">
-            <Typography className="contact-proof-number">&lt; 24h</Typography>
-            <Typography className="contact-proof-label">Average Response Time</Typography>
-          </div>
-          <div className="contact-proof-card">
-            <Typography className="contact-proof-number">20+</Typography>
-            <Typography className="contact-proof-label">Shipped Web Applications</Typography>
-          </div>
-        </div>
-      </section>
     </Box>
   );
 }
-

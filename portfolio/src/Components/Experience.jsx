@@ -9,7 +9,7 @@ import TerminalRoundedIcon from '@mui/icons-material/TerminalRounded';
 import StarsRoundedIcon from '@mui/icons-material/StarsRounded';
 import BusinessRoundedIcon from '@mui/icons-material/BusinessRounded';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import { PortfolioNavigation } from './Home';
+import { PortfolioNavigation } from './PortfolioNavigation';
 import useSiteSettings from '../hooks/useSiteSettings';
 
 const renderJourneyIcon = (icon) => {

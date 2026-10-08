@@ -1,7 +1,7 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { startTransition, useEffect, useState, useMemo } from 'react';
+import React, { Suspense, lazy, useTransition, useEffect, useState, useMemo } from 'react';
 import {
   Box,
   IconButton,
@@ -23,22 +23,29 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
-import Home, { PortfolioNavigation } from './Components/Home';
-import About from './Components/About';
-import Skills from './Components/Skill';
-import Projects from './Components/Projects';
-import Contact from './Components/Contact';
-import Experience from './Components/Experience';
-import Services from './Components/Services';
-
-
-import Admin from './Components/Admin';
-import AIAssistant from './Components/AIAssistant';
-import ResumeModal from './Components/ResumeModal';
-import MeetingScheduler from './Components/MeetingScheduler';
+import { PortfolioNavigation } from './Components/PortfolioNavigation';
+import { CyberLoadingScreen } from './Components/LazyLoader';
+import { TopProgressBar } from './Components/TopProgressBar';
+import { LazySection } from './Components/LazySection';
 import useSiteSettings from './hooks/useSiteSettings';
 import sounds from './utils/SoundManager';
+import { normalizeExternalUrl } from './utils/externalUrl';
 import { firebaseReady, listenForForegroundMessages } from './firebase';
+
+// Lazy Loaded Page Components
+const Home = lazy(() => import('./Components/Home'));
+const About = lazy(() => import('./Components/About'));
+const Skills = lazy(() => import('./Components/Skill'));
+const Projects = lazy(() => import('./Components/Projects'));
+const Contact = lazy(() => import('./Components/Contact'));
+const Experience = lazy(() => import('./Components/Experience'));
+const Services = lazy(() => import('./Components/Services'));
+const Admin = lazy(() => import('./Components/Admin'));
+
+// Lazy Loaded Modals and Widgets
+const AIAssistant = lazy(() => import('./Components/AIAssistant'));
+const ResumeModal = lazy(() => import('./Components/ResumeModal'));
+const MeetingScheduler = lazy(() => import('./Components/MeetingScheduler'));
 
 const THEMES = {
   emerald: {
@@ -98,6 +105,7 @@ const pageFromPath = (pathname) => {
 export default function App() {
   const settings = useSiteSettings();
   const [currentPage, setCurrentPage] = useState(() => pageFromPath(window.location.pathname));
+  const [isPending, startTransition] = useTransition();
   const [darkMode, setDarkMode] = useState(() => window.localStorage.getItem('portfolio-dark-mode') === 'true');
   const [activeThemeKey, setActiveThemeKey] = useState('emerald');
   const [isMuted, setIsMuted] = useState(() => sounds.isMuted);
@@ -148,6 +156,9 @@ export default function App() {
   }, [darkMode, currentTheme]);
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && typeof window.__clearInitialPreloader === 'function') {
+      window.__clearInitialPreloader();
+    }
     if (window.location.pathname === '/') window.history.replaceState({}, '', pageRoutes.Home);
 
     const handlePopState = () => setCurrentPage(pageFromPath(window.location.pathname));
@@ -156,17 +167,13 @@ export default function App() {
       setScrollProgress(scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0);
       setShowTop(window.scrollY > 360);
     };
-    const handleKeyDown = (event) => {
-    };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('popstate', handlePopState);
     handleScroll();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('popstate', handlePopState);
     };
   }, []);
@@ -176,13 +183,13 @@ export default function App() {
     if (!isMobileSinglePage) return;
 
     const sections = [
-      { id: 'Home', selector: '.mobile-all-pages .home-page' },
-      { id: 'About', selector: '.mobile-all-pages .about-page' },
-      { id: 'Skills', selector: '.mobile-all-pages .skills-page' },
-      { id: 'Projects', selector: '.mobile-all-pages .projects-page, .mobile-all-pages .projects-section' },
-      { id: 'Experience', selector: '.mobile-all-pages .experience-page' },
-      { id: 'Services', selector: '.mobile-all-pages .services-page' },
-      { id: 'Contact', selector: '.mobile-all-pages .contact-page' },
+      { id: 'Home', selector: '.mobile-all-pages .home-page, #home-section' },
+      { id: 'About', selector: '.mobile-all-pages .about-page, #about-section' },
+      { id: 'Skills', selector: '.mobile-all-pages .skills-page, #skills-section' },
+      { id: 'Projects', selector: '.mobile-all-pages .projects-page, #projects-section' },
+      { id: 'Experience', selector: '.mobile-all-pages .experience-page, #experience-section' },
+      { id: 'Services', selector: '.mobile-all-pages .services-page, #services-section' },
+      { id: 'Contact', selector: '.mobile-all-pages .contact-page, #contact-section' },
     ];
 
     const observer = new IntersectionObserver(
@@ -213,18 +220,20 @@ export default function App() {
 
   const navigate = (page) => {
     sounds.playClick();
-    startTransition(() => setCurrentPage(page));
+    startTransition(() => {
+      setCurrentPage(page);
+    });
     const route = pageRoutes[page];
     if (route && window.location.pathname !== route) window.history.pushState({}, '', route);
     if (isMobileSinglePage) {
       const sectionSelectors = {
-        Home: '.mobile-all-pages .home-page',
-        About: '.mobile-all-pages .about-page',
-        Skills: '.mobile-all-pages .skills-page',
-        Projects: '.mobile-all-pages .projects-page, .mobile-all-pages .projects-section',
-        Experience: '.mobile-all-pages .experience-page',
-        Services: '.mobile-all-pages .services-page',
-        Contact: '.mobile-all-pages .contact-page',
+        Home: '#home-section, .mobile-all-pages .home-page',
+        About: '#about-section, .mobile-all-pages .about-page',
+        Skills: '#skills-section, .mobile-all-pages .skills-page',
+        Projects: '#projects-section, .mobile-all-pages .projects-page',
+        Experience: '#experience-section, .mobile-all-pages .experience-page',
+        Services: '#services-section, .mobile-all-pages .services-page',
+        Contact: '#contact-section, .mobile-all-pages .contact-page',
       };
       window.requestAnimationFrame(() => {
         const targetElement = document.querySelector(sectionSelectors[page]);
@@ -252,7 +261,6 @@ export default function App() {
     setPrefillSpec({ service });
     navigate('Contact');
   };
-
 
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSent, setNewsletterSent] = useState(false);
@@ -287,47 +295,86 @@ export default function App() {
     return (
       <ThemeProvider theme={muiTheme}>
         <CssBaseline />
-        <Admin />
+        <TopProgressBar isNavigating={isPending} />
+        <Suspense fallback={<CyberLoadingScreen message="AUTHENTICATING COMMAND MATRIX" minHeight="100vh" />}>
+          <Admin />
+        </Suspense>
       </ThemeProvider>
     );
   }
 
-  const page =
-    currentPage === 'About' ? (
-      <About onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
-    ) : currentPage === 'Skills' ? (
-      <Skills onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
-    ) : currentPage === 'Projects' ? (
-      <Projects onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} onOpenScheduler={() => setSchedulerOpen(true)} />
-    ) : currentPage === 'Experience' ? (
-      <Experience onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
-    ) : currentPage === 'Services' ? (
-      <Services onNavigate={navigate} onInquireService={handleServiceInquiry} onOpenResume={() => setResumeOpen(true)} />
-    ) : currentPage === 'Contact' ? (
-      <Contact onNavigate={navigate} prefillSpec={prefillSpec} onOpenResume={() => setResumeOpen(true)} />
-    ) : (
-      <Home
-        onNavigate={navigate}
-        onOpenResume={() => setResumeOpen(true)}
-        onOpenScheduler={() => setSchedulerOpen(true)}
-      />
-    );
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'About':
+        return <About onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />;
+      case 'Skills':
+        return <Skills onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />;
+      case 'Projects':
+        return <Projects onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} onOpenScheduler={() => setSchedulerOpen(true)} />;
+      case 'Experience':
+        return <Experience onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />;
+      case 'Services':
+        return <Services onNavigate={navigate} onInquireService={handleServiceInquiry} onOpenResume={() => setResumeOpen(true)} />;
+      case 'Contact':
+        return <Contact onNavigate={navigate} prefillSpec={prefillSpec} onOpenResume={() => setResumeOpen(true)} />;
+      default:
+        return (
+          <Home
+            onNavigate={navigate}
+            onOpenResume={() => setResumeOpen(true)}
+            onOpenScheduler={() => setSchedulerOpen(true)}
+          />
+        );
+    }
+  };
 
   const mobilePages = (
     <Box className="mobile-all-pages">
-      <Home
-        onNavigate={navigate}
-        onOpenResume={() => setResumeOpen(true)}
-        onOpenScheduler={() => setSchedulerOpen(true)}
-      />
-      <About onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
-      <Skills onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
-      <Projects onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} onOpenScheduler={() => setSchedulerOpen(true)} />
-      <Experience onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
-      <Services onNavigate={navigate} onInquireService={handleServiceInquiry} onOpenResume={() => setResumeOpen(true)} />
-     
-     
-      <Contact onNavigate={navigate} prefillSpec={prefillSpec} onOpenResume={() => setResumeOpen(true)} />
+      <LazySection id="home-section" minHeight="600px">
+        <Suspense fallback={<CyberLoadingScreen compact message="INITIALIZING HERO" />}>
+          <Home
+            onNavigate={navigate}
+            onOpenResume={() => setResumeOpen(true)}
+            onOpenScheduler={() => setSchedulerOpen(true)}
+          />
+        </Suspense>
+      </LazySection>
+
+      <LazySection id="about-section" minHeight="480px">
+        <Suspense fallback={<CyberLoadingScreen compact message="LOADING ABOUT ME" />}>
+          <About onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
+        </Suspense>
+      </LazySection>
+
+      <LazySection id="skills-section" minHeight="480px">
+        <Suspense fallback={<CyberLoadingScreen compact message="LOADING TECH MATRIX" />}>
+          <Skills onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
+        </Suspense>
+      </LazySection>
+
+      <LazySection id="projects-section" minHeight="520px">
+        <Suspense fallback={<CyberLoadingScreen compact message="LOADING SHOWCASE" />}>
+          <Projects onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} onOpenScheduler={() => setSchedulerOpen(true)} />
+        </Suspense>
+      </LazySection>
+
+      <LazySection id="experience-section" minHeight="460px">
+        <Suspense fallback={<CyberLoadingScreen compact message="LOADING CAREER JOURNEY" />}>
+          <Experience onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
+        </Suspense>
+      </LazySection>
+
+      <LazySection id="services-section" minHeight="460px">
+        <Suspense fallback={<CyberLoadingScreen compact message="LOADING SERVICES" />}>
+          <Services onNavigate={navigate} onInquireService={handleServiceInquiry} onOpenResume={() => setResumeOpen(true)} />
+        </Suspense>
+      </LazySection>
+
+      <LazySection id="contact-section" minHeight="460px">
+        <Suspense fallback={<CyberLoadingScreen compact message="CONNECTING GATEWAY" />}>
+          <Contact onNavigate={navigate} prefillSpec={prefillSpec} onOpenResume={() => setResumeOpen(true)} />
+        </Suspense>
+      </LazySection>
     </Box>
   );
 
@@ -336,6 +383,8 @@ export default function App() {
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
+      <TopProgressBar isNavigating={isPending} />
+
       <Box
         className={`app-shell ${darkMode ? 'dark-mode' : ''}`}
         sx={{
@@ -362,7 +411,14 @@ export default function App() {
           onOpenScheduler={() => setSchedulerOpen(true)}
         />
 
-        {!isMobileSinglePage && <Box className="desktop-page">{page}</Box>}
+        {!isMobileSinglePage && (
+          <Box className="desktop-page">
+            <Suspense fallback={<CyberLoadingScreen minHeight="72vh" message={`LOADING ${currentPage.toUpperCase()} MATRIX`} />}>
+              {renderPage()}
+            </Suspense>
+          </Box>
+        )}
+
         {isMobileSinglePage && mobilePages}
 
         {/* Global Footer */}
@@ -388,9 +444,7 @@ export default function App() {
 
           <Box className="footer-grid">
             <Box className="footer-brand">
-              <button type="button" className="footer-logo" onClick={() => navigate('Home')} aria-label="Go to home">
-                {settings?.brandLogo || 'Y'}
-              </button>
+             
               <Box>
                 <Typography className="footer-name">{settings?.name || 'John Doe'}</Typography>
                 <Typography className="footer-caption">{settings?.role || 'Full Stack Developer'}</Typography>
@@ -400,7 +454,7 @@ export default function App() {
                 <IconButton component="a" href={settings?.github || 'https://github.com'} target="_blank" rel="noreferrer" aria-label="GitHub">
                   <GitHubIcon />
                 </IconButton>
-                <IconButton component="a" href={settings?.linkedin || 'https://linkedin.com'} target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                <IconButton component="a" href={normalizeExternalUrl(settings?.linkedin, 'https://www.linkedin.com/')} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                   <LinkedInIcon />
                 </IconButton>
                 <IconButton component="a" href={settings?.instagram || 'https://instagram.com'} target="_blank" rel="noreferrer" aria-label="Instagram">
@@ -533,19 +587,16 @@ export default function App() {
           </Tooltip>
         )}
 
-        {/* Interactive Feature 1: AI Assistant Widget */}
-        <AIAssistant
-          onNavigate={navigate}
-          onOpenResume={() => setResumeOpen(true)}
-          onOpenScheduler={() => setSchedulerOpen(true)}
-        />
-
-
-        {/* Interactive Feature 6: ATS Resume Modal */}
-        <ResumeModal open={resumeOpen} onClose={() => setResumeOpen(false)} />
-
-        {/* Interactive Feature 9: Meeting Scheduler */}
-        <MeetingScheduler open={schedulerOpen} onClose={() => setSchedulerOpen(false)} />
+        {/* Lazy Loaded Interactive Modals and AI Assistant */}
+        <Suspense fallback={null}>
+          <AIAssistant
+            onNavigate={navigate}
+            onOpenResume={() => setResumeOpen(true)}
+            onOpenScheduler={() => setSchedulerOpen(true)}
+          />
+          {resumeOpen && <ResumeModal open={resumeOpen} onClose={() => setResumeOpen(false)} />}
+          {schedulerOpen && <MeetingScheduler open={schedulerOpen} onClose={() => setSchedulerOpen(false)} />}
+        </Suspense>
       </Box>
     </ThemeProvider>
   );
