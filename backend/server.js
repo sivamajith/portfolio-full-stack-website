@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -19,6 +20,20 @@ const port = Number(process.env.PORT) || 5000;
 
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:3000' }));
+app.use(compression({
+  level: 6,
+  threshold: 1024,
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) return false;
+    return compression.filter(req, res);
+  },
+}));
+app.use((req, res, next) => {
+  if (req.method === 'GET' && ['/api/settings', '/api/projects', '/api/reviews'].includes(req.path)) {
+    res.set('Cache-Control', 'public, max-age=30, stale-while-revalidate=60');
+  }
+  next();
+});
 app.use(express.json({ limit: process.env.JSON_BODY_LIMIT || '256kb' }));
 app.use(express.urlencoded({ extended: true, limit: process.env.URLENCODED_BODY_LIMIT || '256kb' }));
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));

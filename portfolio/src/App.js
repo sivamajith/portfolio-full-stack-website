@@ -24,7 +24,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
 import { PortfolioNavigation } from './Components/PortfolioNavigation';
-import { CyberLoadingScreen } from './Components/LazyLoader';
+import { CyberLoadingScreen, SkeletonPage } from './Components/LazyLoader';
 import { TopProgressBar } from './Components/TopProgressBar';
 import { LazySection } from './Components/LazySection';
 import useSiteSettings from './hooks/useSiteSettings';
@@ -330,7 +330,7 @@ export default function App() {
 
   const mobilePages = (
     <Box className="mobile-all-pages">
-      <LazySection id="home-section" minHeight="600px">
+      <LazySection id="home-section" minHeight="600px" pageType="home">
         <Suspense fallback={<CyberLoadingScreen compact message="INITIALIZING HERO" />}>
           <Home
             onNavigate={navigate}
@@ -340,37 +340,37 @@ export default function App() {
         </Suspense>
       </LazySection>
 
-      <LazySection id="about-section" minHeight="480px">
+      <LazySection id="about-section" minHeight="480px" pageType="about">
         <Suspense fallback={<CyberLoadingScreen compact message="LOADING ABOUT ME" />}>
           <About onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
         </Suspense>
       </LazySection>
 
-      <LazySection id="skills-section" minHeight="480px">
+      <LazySection id="skills-section" minHeight="480px" pageType="skills">
         <Suspense fallback={<CyberLoadingScreen compact message="LOADING TECH MATRIX" />}>
           <Skills onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
         </Suspense>
       </LazySection>
 
-      <LazySection id="projects-section" minHeight="520px">
+      <LazySection id="projects-section" minHeight="520px" pageType="projects">
         <Suspense fallback={<CyberLoadingScreen compact message="LOADING SHOWCASE" />}>
           <Projects onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} onOpenScheduler={() => setSchedulerOpen(true)} />
         </Suspense>
       </LazySection>
 
-      <LazySection id="experience-section" minHeight="460px">
+      <LazySection id="experience-section" minHeight="460px" pageType="experience">
         <Suspense fallback={<CyberLoadingScreen compact message="LOADING CAREER JOURNEY" />}>
           <Experience onNavigate={navigate} onOpenResume={() => setResumeOpen(true)} />
         </Suspense>
       </LazySection>
 
-      <LazySection id="services-section" minHeight="460px">
+      <LazySection id="services-section" minHeight="460px" pageType="services">
         <Suspense fallback={<CyberLoadingScreen compact message="LOADING SERVICES" />}>
           <Services onNavigate={navigate} onInquireService={handleServiceInquiry} onOpenResume={() => setResumeOpen(true)} />
         </Suspense>
       </LazySection>
 
-      <LazySection id="contact-section" minHeight="460px">
+      <LazySection id="contact-section" minHeight="460px" pageType="contact">
         <Suspense fallback={<CyberLoadingScreen compact message="CONNECTING GATEWAY" />}>
           <Contact onNavigate={navigate} prefillSpec={prefillSpec} onOpenResume={() => setResumeOpen(true)} />
         </Suspense>
@@ -391,6 +391,12 @@ export default function App() {
           '--portfolio-background-image': `url(${process.env.PUBLIC_URL}/portfolio-background.png)`,
         }}
       >
+        <Box className={`page-transition-overlay ${isPending ? 'visible' : ''}`} aria-live="polite" aria-busy={isPending}>
+          <Box className="page-transition-card">
+            <Box className="page-transition-spinner" />
+            <Typography className="page-transition-label">Loading {currentPage}</Typography>
+          </Box>
+        </Box>
         <Box
           className="scroll-progress"
           sx={{
@@ -412,8 +418,8 @@ export default function App() {
         />
 
         {!isMobileSinglePage && (
-          <Box className="desktop-page">
-            <Suspense fallback={<CyberLoadingScreen minHeight="72vh" message={`LOADING ${currentPage.toUpperCase()} MATRIX`} />}>
+          <Box className={`desktop-page page-shell ${isPending ? 'is-transitioning' : 'is-ready'}`}>
+            <Suspense fallback={<SkeletonPage type={currentPage.toLowerCase()} />}>
               {renderPage()}
             </Suspense>
           </Box>

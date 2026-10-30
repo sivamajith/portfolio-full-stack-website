@@ -411,6 +411,103 @@ export function SkillCardSkeleton() {
  * Dynamic Skeleton Page tailored for smooth UX during lazy transitions
  */
 export function SkeletonPage({ type = 'general' }) {
+  if (type === 'home') {
+    return (
+      <Box sx={{ maxWidth: 1280, mx: 'auto', p: { xs: 3, md: 6 }, display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1.2fr 0.8fr' }, gap: 4, alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <SkeletonBlock width="180px" height={28} borderRadius="999px" />
+          <SkeletonBlock width="70%" height={52} borderRadius="12px" />
+          <SkeletonBlock width="55%" height={30} borderRadius="12px" />
+          <SkeletonBlock width="100%" height={72} borderRadius="12px" />
+          <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+            <SkeletonBlock width="140px" height={46} borderRadius="12px" />
+            <SkeletonBlock width="130px" height={46} borderRadius="12px" />
+          </Box>
+          <Box sx={{ display: 'flex', gap: 1.5, mt: 1 }}>
+            {[1, 2, 3, 4].map((item) => (
+              <SkeletonBlock key={item} width="52px" height={52} borderRadius="50%" />
+            ))}
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <SkeletonBlock width="100%" maxWidth={420} height={480} borderRadius="28px" />
+        </Box>
+      </Box>
+    );
+  }
+
+  if (type === 'about') {
+    return (
+      <Box sx={{ maxWidth: 1280, mx: 'auto', p: { xs: 3, md: 6 }, display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1.1fr 0.9fr' }, gap: 4 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <SkeletonBlock width="150px" height={24} borderRadius="999px" />
+          <SkeletonBlock width="85%" height={46} borderRadius="12px" />
+          <SkeletonBlock width="100%" height={64} borderRadius="12px" />
+          <SkeletonBlock width="95%" height={64} borderRadius="12px" />
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(120px, 1fr))', gap: 2, mt: 1 }}>
+            {[1, 2, 3, 4].map((item) => (
+              <SkeletonBlock key={item} width="100%" height={92} borderRadius="16px" />
+            ))}
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <SkeletonBlock width="100%" maxWidth={420} height={420} borderRadius="30px" />
+        </Box>
+      </Box>
+    );
+  }
+
+  if (type === 'experience') {
+    return (
+      <Box sx={{ maxWidth: 1280, mx: 'auto', p: { xs: 3, md: 6 }, display: 'grid', gridTemplateColumns: { xs: '1fr', md: '0.9fr 1.1fr' }, gap: 4 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <SkeletonBlock width="180px" height={24} borderRadius="999px" />
+          <SkeletonBlock width="90%" height={52} borderRadius="12px" />
+          <SkeletonBlock width="100%" height={58} borderRadius="12px" />
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {[1, 2, 3, 4].map((item) => (
+            <SkeletonBlock key={item} width="100%" height={84} borderRadius="18px" />
+          ))}
+        </Box>
+      </Box>
+    );
+  }
+
+  if (type === 'services') {
+    return (
+      <Box sx={{ maxWidth: 1280, mx: 'auto', p: { xs: 3, md: 6 } }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, mb: 4 }}>
+          <SkeletonBlock width="160px" height={24} borderRadius="999px" />
+          <SkeletonBlock width="52%" height={52} borderRadius="12px" />
+        </Box>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, minmax(0, 1fr))' }, gap: 3 }}>
+          {[1, 2, 3, 4, 5, 6].map((item) => (
+            <SkeletonBlock key={item} width="100%" height={260} borderRadius="22px" />
+          ))}
+        </Box>
+      </Box>
+    );
+  }
+
+  if (type === 'contact') {
+    return (
+      <Box sx={{ maxWidth: 1200, mx: 'auto', p: { xs: 3, md: 6 }, display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 4 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <SkeletonBlock width="150px" height={24} borderRadius="999px" />
+          <SkeletonBlock width="82%" height={52} borderRadius="12px" />
+          <SkeletonBlock width="100%" height={56} borderRadius="12px" />
+          <SkeletonBlock width="100%" height={56} borderRadius="12px" />
+          <SkeletonBlock width="100%" height={140} borderRadius="16px" />
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <SkeletonBlock width="100%" height={200} borderRadius="20px" />
+          <SkeletonBlock width="100%" height={90} borderRadius="20px" />
+        </Box>
+      </Box>
+    );
+  }
+
   if (type === 'projects') {
     return (
       <Box sx={{ maxWidth: 1280, mx: 'auto', p: { xs: 3, md: 6 }, display: 'grid', gridTemplateColumns: { xs: '1fr', md: '380px 1fr' }, gap: 4 }}>

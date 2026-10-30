@@ -607,6 +607,53 @@ a:focus-visible {
 
 /* Premium interaction layer */
 .app-shell { min-height: 100dvh; transition: background .3s ease, color .3s ease; }
+.page-shell { opacity: 1; transform: translateY(0); transition: opacity .28s ease, transform .28s ease; }
+.page-shell.is-transitioning { opacity: .72; transform: translateY(4px); }
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.22);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .22s ease, visibility .22s ease;
+}
+.page-transition-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.page-transition-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+}
+.page-transition-spinner {
+  width: 42px;
+  height: 42px;
+  border: 2px solid rgba(148, 163, 184, 0.25);
+  border-top-color: var(--accent-color, #22c55e);
+  border-radius: 50%;
+  animation: pageTransitionSpin .9s linear infinite;
+}
+.page-transition-label {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase;
+  color: var(--accent-dark, #16a34a) !important;
+}
 .mobile-all-pages { display: none; }
 .scroll-progress {
   position: fixed;
@@ -651,6 +698,8 @@ kbd { padding: 3px 6px; border: 1px solid #dbe5df; border-radius: 5px; color: #6
 .command-dialog .MuiListItemText-secondary { color: #94a3b8; font-size: 12px; }
 .dark-mode .floating-tools { border-color: rgba(134, 239, 172, .2); background: rgba(15, 23, 42, .88); }
 .dark-mode .floating-tools .MuiIconButton-root, .dark-mode .back-to-top { color: #86efac; background: #172b24; }
+.dark-mode .page-transition-card { background: rgba(15, 23, 42, 0.7); border-color: rgba(134, 239, 172, 0.2); }
+.dark-mode .page-transition-label { color: #bbf7d0 !important; }
 .dark-mode .home-page, .dark-mode .about-page, .dark-mode .contact-page, .dark-mode .experience-page, .dark-mode .skills-page { color: #e2e8f0; background: radial-gradient(circle at 60% 45%, #13271e 0, #0b1220 44%, #0b1220 100%); }
 .dark-mode .home-header, .dark-mode .skills-page header { background: rgba(11, 18, 32, .88) !important; border-color: rgba(148, 163, 184, .16) !important; }
 .dark-mode .home-nav-link, .dark-mode .home-intro h1, .dark-mode .home-intro h2, .dark-mode .about-title, .dark-mode .contact-copy h1, .dark-mode .experience-title, .dark-mode .timeline-title { color: #f8fafc; }
@@ -715,6 +764,7 @@ kbd { padding: 3px 6px; border: 1px solid #dbe5df; border-radius: 5px; color: #6
 .project-dialog-close { position: absolute !important; top: 12px; right: 12px; z-index: 2; color: #64748b; background: rgba(255,255,255,.85) !important; }
 .project-dialog-preview { height: 190px; margin: 0 -24px 22px; overflow: hidden; background: #f1f5f9; }
 .project-dialog-kicker { margin-top: 4px !important; color: #16a34a; font: 700 10px 'Courier New', monospace !important; letter-spacing: .12em; }
+@keyframes pageTransitionSpin { to { transform: rotate(360deg); } }
 @keyframes statusPulse { 0%, 100% { box-shadow: 0 0 0 3px rgba(34,197,94,.12); } 50% { box-shadow: 0 0 0 7px rgba(34,197,94,0); } }
 @keyframes roleReveal { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 650px) {

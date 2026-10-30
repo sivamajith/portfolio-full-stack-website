@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
-import { CyberLoadingScreen } from './LazyLoader';
+import { SkeletonPage } from './LazyLoader';
 
 /**
  * LazySection Component
@@ -15,6 +15,7 @@ export function LazySection({
   fallback,
   minHeight = '360px',
   sx = {},
+  pageType = 'general',
 }) {
   const [hasEntered, setHasEntered] = useState(false);
   const containerRef = useRef(null);
@@ -57,7 +58,7 @@ export function LazySection({
         ...sx,
       }}
     >
-      {hasEntered ? children : (fallback || <CyberLoadingScreen compact minHeight={minHeight} />)}
+      {hasEntered ? children : (fallback || <SkeletonPage type={pageType} />)}
     </Box>
   );
 }
