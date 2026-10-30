@@ -27,68 +27,11 @@ const renderJourneyIcon = (icon) => {
   return <CodeRoundedIcon />;
 };
 
-const defaultJourney = [
-  { year: '2021', title: 'Started Journey', detail: 'Started learning\nHTML, CSS & JS', icon: 'code' },
-  { year: '2022', title: 'Frontend Developer', detail: 'Built interactive\nUI with React', icon: 'tree' },
-  { year: '2023', title: 'Full Stack Developer', detail: 'Started building\nfull stack apps', icon: 'code' },
-  { year: '2024', title: 'Building Solutions', detail: 'Creating scalable\nsolutions', icon: 'rocket' },
-];
+const defaultJourney = [];
 
-const defaultWorkExperience = [
-  {
-    role: 'Senior Full Stack Engineer (Contract)',
-    company: 'Apex Digital Labs',
-    location: 'Remote · San Francisco',
-    period: '2023 - Present',
-    bullets: [
-      'Architected and delivered high-throughput real-time collaboration dashboards using React 19, Socket.io, and Redis pub/sub.',
-      'Reduced average API response latencies by 42% through query index restructuring and Redis caching layers.',
-      'Mentored a team of 4 junior developers on TypeScript best practices, CI/CD workflows, and code review rigor.',
-    ],
-    tags: ['React', 'Node.js', 'Redis', 'Docker', 'AWS ECS', 'TypeScript'],
-  },
-  {
-    role: 'Frontend Software Engineer',
-    company: 'TechFlow Solutions',
-    location: 'Hybrid · New York, NY',
-    period: '2022 - 2023',
-    bullets: [
-      'Engineered an enterprise design system in Material-UI and Tailwind CSS adopted by 5 product squads.',
-      'Spearheaded the migration of legacy Single Page Apps to Next.js App Router, boosting Lighthouse SEO scores to 98+.',
-      'Implemented automated Cypress and React Testing Library suites, lowering regression escape rate by 60%.',
-    ],
-    tags: ['Next.js', 'React', 'Tailwind CSS', 'Redux Toolkit', 'Jest', 'Figma'],
-  },
-  {
-    role: 'Full Stack Web Developer Intern',
-    company: 'Innovate Byte',
-    location: 'Remote',
-    period: '2021 - 2022',
-    bullets: [
-      'Developed and maintained REST API endpoints for user onboarding, profile authentication, and role authorization.',
-      'Integrated Stripe Checkout and webhooks for seamless subscription billing cycles.',
-      'Collaborated with UX designers to build responsive mobile-first landing pages and interactive client portals.',
-    ],
-    tags: ['JavaScript', 'Express.js', 'MongoDB', 'HTML5/CSS3', 'Git'],
-  },
-];
+const defaultWorkExperience = [];
 
-const defaultEducation = [
-  {
-    degree: 'Bachelor of Technology in Computer Science & Engineering',
-    institution: 'University Institute of Technology',
-    period: '2019 - 2023',
-    grade: 'GPA: 8.8 / 10.0 (First Class with Distinction)',
-    courses: 'Data Structures & Algorithms, Distributed Systems, Database Management Systems, Computer Networks, Software Engineering.',
-  },
-  {
-    degree: 'Higher Secondary Education (Physics, Chemistry, Math & CS)',
-    institution: 'St. Xavier Senior Secondary School',
-    period: '2017 - 2019',
-    grade: 'Score: 94.6%',
-    courses: 'Computer Science (C++ & Python), Advanced Mathematics, Physics, Logic Design.',
-  },
-];
+const defaultEducation = [];
 
 export default function Experience({ onNavigate, onOpenResume }) {
   const settings = useSiteSettings();
@@ -103,13 +46,13 @@ export default function Experience({ onNavigate, onOpenResume }) {
       {/* Visual Journey Hero */}
       <main className="experience-hero">
         <section className="experience-copy">
-          <Typography className="experience-kicker">{settings?.experienceKicker || '// MY JOURNEY'}</Typography>
-          <Typography component="h1" className="experience-title">
-            {settings?.experienceTitle ? settings.experienceTitle : <>Learning. Building.<br /><Box component="span">Growing.</Box></>}
-          </Typography>
-          <Typography className="experience-description">
-            {settings?.experienceDescription || 'My journey as a developer has been about constant learning, building amazing things and solving real world problems.'}
-          </Typography>
+          {settings?.experienceKicker ? <Typography className="experience-kicker">{settings.experienceKicker}</Typography> : null}
+          {settings?.experienceTitle ? (
+            <Typography component="h1" className="experience-title">{settings.experienceTitle}</Typography>
+          ) : null}
+          {settings?.experienceDescription ? (
+            <Typography className="experience-description">{settings.experienceDescription}</Typography>
+          ) : null}
         </section>
 
         <section className="experience-timeline" aria-label="Career journey">

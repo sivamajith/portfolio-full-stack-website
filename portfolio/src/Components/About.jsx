@@ -7,69 +7,13 @@ import useSiteSettings from '../hooks/useSiteSettings';
 import sounds from '../utils/SoundManager';
 import { LazyImage } from './LazyImage';
 
-const timelineData = [
-  { year: '2021', title: 'Started Journey', subtitle: 'Learned HTML, CSS, JavaScript, and Core CS Algorithms' },
-  { year: '2022', title: 'Frontend Developer', subtitle: 'Specialized in React, Next.js, and Modern UI design systems' },
-  { year: '2023', title: 'Full Stack Developer', subtitle: 'Architected Node.js microservices, MongoDB, and AWS cloud APIs' },
-  { year: '2024', title: 'Building Solutions', subtitle: 'Delivering end-to-end scalable products and high-impact software' },
-];
+const timelineData = [];
 
-const statsData = [
-  { value: '3', suffix: '+', label: 'Years Experience' },
-  { value: '20', suffix: '+', label: 'Projects Shipped' },
-  { value: '10', suffix: '+', label: 'Technologies Mastered' },
-  { value: '99', suffix: '%', label: 'Client Satisfaction' },
-];
+const statsData = [];
 
-const defaultValues = [
-  {
-    icon: '⚡',
-    name: 'Performance First',
-    desc: 'Every millisecond matters. I engineer zero-lag architectures with lean bundle footprints and optimized database queries.',
-  },
-  {
-    icon: '💎',
-    name: 'Craftsmanship & Clean Code',
-    desc: 'Self-documenting TypeScript, comprehensive test coverage, and modular design patterns built to scale smoothly.',
-  },
-  {
-    icon: '🎯',
-    name: 'Product & User Centric',
-    desc: 'Technology is a vehicle for solving human problems. I build intuitive UX flows backed by data-driven design thinking.',
-  },
-  {
-    icon: '🚀',
-    name: 'Rapid Execution & Ownership',
-    desc: 'From initial prototype to production deployment, I take end-to-end responsibility and ship reliably on tight deadlines.',
-  },
-];
+const defaultValues = [];
 
-const defaultAchievements = [
-  {
-    icon: '🏆',
-    title: 'AWS Certified Developer',
-    issuer: 'Amazon Web Services',
-    year: '2024',
-  },
-  {
-    icon: '⚛️',
-    title: 'Advanced React & Next.js Professional',
-    issuer: 'Meta / Coursera',
-    year: '2023',
-  },
-  {
-    icon: '🍃',
-    title: 'MongoDB Certified DBA & Developer',
-    issuer: 'MongoDB University',
-    year: '2023',
-  },
-  {
-    icon: '🌟',
-    title: 'Open Source Contributor (500+ Stars)',
-    issuer: 'GitHub Community',
-    year: '2024',
-  },
-];
+const defaultAchievements = [];
 
 const getCertificateThumbnailUrl = (url, type) => {
   if (!url || type?.startsWith('image/')) return url;
@@ -129,16 +73,16 @@ const About = ({ onNavigate, onOpenResume }) => {
       <PortfolioNavigation onNavigate={onNavigate} activePage="About" onOpenResume={onOpenResume} />
       <Container className="about-layout" maxWidth={false} sx={{ pb: 8 }}>
         <Box className="about-copy">
-          <Typography className="about-kicker">{settings?.aboutKicker || '// ABOUT ME'}</Typography>
-          <Typography component="h1" className="about-title">
-            {settings?.aboutTitle || 'Building Digital Experiences That Solve Real Problems'}
-          </Typography>
-          <Typography className="about-description">
-            {settings?.aboutDescription || "I'm a passionate Full Stack Developer with 3+ years of experience building modern web applications and digital products."}
-          </Typography>
-          <Typography className="about-description about-description-last">
-            {settings?.aboutSecondDescription || 'I love turning complex requirements into clean code, intuitive user interfaces, and high-throughput backend services.'}
-          </Typography>
+          {settings?.aboutKicker ? <Typography className="about-kicker">{settings.aboutKicker}</Typography> : null}
+          {settings?.aboutTitle ? (
+            <Typography component="h1" className="about-title">{settings.aboutTitle}</Typography>
+          ) : null}
+          {settings?.aboutDescription ? (
+            <Typography className="about-description">{settings.aboutDescription}</Typography>
+          ) : null}
+          {settings?.aboutSecondDescription ? (
+            <Typography className="about-description about-description-last">{settings.aboutSecondDescription}</Typography>
+          ) : null}
 
           <Box className="about-stats">
             {stats.map((stat) => (

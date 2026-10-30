@@ -24,55 +24,23 @@ import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
 import sounds from '../utils/SoundManager';
 import useSiteSettings from '../hooks/useSiteSettings';
 
-const defaultWorkExperience = [
-  {
-    role: 'Senior Full Stack Developer',
-    company: 'Apex Digital Labs',
-    location: 'Remote · San Francisco',
-    period: '2023 — Present',
-    bullets: [
-      'Architected and delivered 10+ end-to-end full-stack web applications using React, Next.js, Node.js, and MongoDB.',
-      'Decreased initial page load times by 45% through aggressive bundle splitting, image caching, and lazy loading strategies.',
-      'Designed resilient RESTful and GraphQL APIs with automated unit and integration test suites.',
-    ],
-    tags: ['React', 'Node.js', 'Redis', 'Docker', 'AWS ECS', 'TypeScript'],
-  },
-  {
-    role: 'Frontend Software Engineer',
-    company: 'TechFlow Agency',
-    location: 'Remote',
-    period: '2022 — 2023',
-    bullets: [
-      'Developed responsive, accessibility-compliant (WCAG 2.1 AA) UI components in React and Tailwind CSS.',
-      'Implemented real-time WebSocket notifications and live collaborative feeds for 20,000+ monthly active users.',
-    ],
-    tags: ['Next.js', 'React', 'Tailwind CSS', 'Redux Toolkit', 'Jest', 'Figma'],
-  },
-];
+const defaultWorkExperience = [];
 
-const defaultEducation = [
-  {
-    degree: 'Bachelor of Technology in Computer Science & Engineering',
-    institution: 'University Institute of Technology',
-    period: '2019 — 2023',
-    grade: 'GPA: 8.8 / 10.0 (First Class with Distinction)',
-    courses: 'Data Structures & Algorithms, Distributed Systems, Database Management Systems, Computer Networks, Software Engineering.',
-  },
-];
+const defaultEducation = [];
 
 export default function ResumeModal({ open, onClose }) {
   const settings = useSiteSettings();
   const [activeTab, setActiveTab] = useState(0);
   const [copied, setCopied] = useState(false);
 
-  const name = settings?.name || 'John Doe';
-  const role = settings?.role || 'Full Stack Developer';
-  const email = settings?.email || 'johndoe@example.com';
-  const phone = settings?.phone || '+1 (123) 456-7890';
-  const location = settings?.location || 'San Francisco, CA';
-  const github = settings?.github || 'https://github.com';
-  const linkedin = settings?.linkedin || 'https://linkedin.com';
-  const summary = settings?.description || 'Passionate Full Stack Developer with 3+ years of experience building modern, high-performance web applications and digital products.';
+  const name = settings?.name || '';
+  const role = settings?.role || '';
+  const email = settings?.email || '';
+  const phone = settings?.phone || '';
+  const location = settings?.location || '';
+  const github = settings?.github || '';
+  const linkedin = settings?.linkedin || '';
+  const summary = settings?.description || '';
 
   const workList = Array.isArray(settings?.workExperience) && settings.workExperience.length > 0
     ? settings.workExperience

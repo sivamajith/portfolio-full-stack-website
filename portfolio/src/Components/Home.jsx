@@ -25,56 +25,34 @@ function buildWhatsAppLink(value) {
 }
 
 
-const fallbackMarqueeReviews = [
-  {
-    name: 'Ananya R.',
-    role: 'CEO @ NextGen Health',
-    rating: 5,
-    text: 'Transformed our MVP wireframes into a blazing fast, production-grade product in 3 weeks.',
-  },
-  {
-    name: 'Marcus L.',
-    role: 'Product Lead @ TechFlow',
-    rating: 5,
-    text: 'Sharp engineering, meticulous UI attention, and effortless communication throughout.',
-  },
-  {
-    name: 'Priya S.',
-    role: 'Creative Director',
-    rating: 5,
-    text: 'A rare engineer who balances aesthetic pixel-perfection with high-throughput backend code.',
-  },
-  {
-    name: 'David K.',
-    role: 'VP Engineering @ Streamline',
-    rating: 5,
-    text: 'Solved our WebSocket concurrency bottlenecks and delivered rock-solid test coverage.',
-  },
-];
+const fallbackMarqueeReviews = [];
 
 export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler }) {
   const settings = useSiteSettings();
   const [roleIndex, setRoleIndex] = useState(0);
   const [liveReviews, setLiveReviews] = useState([]);
 
-  const heroRoles = Array.isArray(settings?.heroRoles) && settings.heroRoles.length
-    ? settings.heroRoles
-    : [settings?.role || 'Full Stack Developer', 'Product Engineer', 'Creative Problem Solver'];
-  const roles = heroRoles.length ? heroRoles : [settings?.role || 'Full Stack Developer'];
-  const displayName = settings?.name || 'John Doe';
-  const nameParts = displayName.split(' ');
-  const firstName = nameParts.shift();
-  const lastName = nameParts.join(' ') || 'Doe';
-  const stats = settings?.heroStats?.length
-    ? settings.heroStats
-    : [
-        { value: '20+', label: 'Projects shipped' },
-        { value: '3yr', label: 'Building digitally' },
-        { value: '24h', label: 'Typical reply' },
-      ];
-  const techStack = settings?.heroTechStack?.length
-    ? settings.heroTechStack
-    : ['React', 'Node.js', 'TypeScript', 'MongoDB', 'AWS', 'Figma'];
+  const safeSettings = settings || {};
+  const heroRoles = Array.isArray(safeSettings.heroRoles) && safeSettings.heroRoles.length
+    ? safeSettings.heroRoles
+    : (safeSettings.role ? [safeSettings.role] : []);
+  const roles = heroRoles.length ? heroRoles : [];
+  const displayName = safeSettings.name ? String(safeSettings.name).trim() : '';
+  const nameParts = displayName ? displayName.split(/\s+/) : [];
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ');
+  const stats = safeSettings.heroStats?.length ? safeSettings.heroStats : [];
+  const techStack = safeSettings.heroTechStack?.length ? safeSettings.heroTechStack : [];
+  const hasPortfolioContent = Boolean(
+    safeSettings.name ||
+    safeSettings.role ||
+    safeSettings.description ||
+    safeSettings.tagline ||
+    safeSettings.profileImage ||
+    safeSettings.heroRoles?.length ||
+    safeSettings.heroStats?.length ||
+    safeSettings.heroTechStack?.length
+  );
 
   const fetchLiveReviews = () => {
     loadReviews()
@@ -108,11 +86,14 @@ export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler })
         : fallbackMarqueeReviews);
 
   useEffect(() => {
+    if (!roles.length) return undefined;
     const timer = window.setInterval(() => setRoleIndex((index) => (index + 1) % roles.length), 2800);
     return () => window.clearInterval(timer);
   }, [roles.length]);
 
-  const availabilityLabel = settings?.availableText || (settings?.available === false ? 'Currently unavailable' : 'Available for select projects');
+  const availabilityLabel = safeSettings.availableText || (safeSettings.available === false ? 'Currently unavailable' : 'Available for select projects');
+
+  if (!hasPortfolioContent) return null;
 
   return (
     <Box className="home-page">
@@ -139,17 +120,21 @@ export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler })
             <span className="status-pulse" style={{ backgroundColor: settings?.available === false ? '#ef4444' : 'var(--accent-color, #22c55e)' }} /> {availabilityLabel} <span className="status-dot">04</span>
           </Box>
           
-          <Box className="home-greeting">Hi, I&apos;m</Box>
-          <h1>
-            {firstName} <span>{lastName}</span>
-          </h1>
-          <h2 className="home-role" key={roles[roleIndex] || settings?.role || 'Full Stack Developer'}>
-            {roles[roleIndex] || settings?.role || 'Full Stack Developer'}
-          </h2>
-          <p className="home-tagline">{settings?.tagline || 'Problem Solver | Tech Enthusiast'}</p>
-          <p className="home-description">
-            {settings?.description || 'I build scalable web applications with modern technologies and excellent user experiences.'}
-          </p>
+          {displayName ? <Box className="home-greeting">Hi, I&apos;m</Box> : null}
+          {displayName ? (
+            <h1>
+              {firstName} {lastName ? <span>{lastName}</span> : null}
+            </h1>
+          ) : null}
+          {roles[roleIndex] ? (
+            <h2 className="home-role" key={roles[roleIndex]}>
+              {roles[roleIndex]}
+            </h2>
+          ) : null}
+          {settings?.tagline ? <p className="home-tagline">{settings.tagline}</p> : null}
+          {settings?.description ? (
+            <p className="home-description">{settings.description}</p>
+          ) : null}
           <Box className="home-actions">
             <Button
               className="home-primary-button"
@@ -191,14 +176,16 @@ export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler })
               <Instagram />
             </IconButton>
           </Box>
-          <Box className="home-proof-row">
-            {stats.map((stat) => (
-              <Box key={stat.label}>
-                <strong>{stat.value}</strong>
-                <span>{stat.label}</span>
-              </Box>
-            ))}
-          </Box>
+          {stats.length > 0 ? (
+            <Box className="home-proof-row">
+              {stats.map((stat) => (
+                <Box key={stat.label}>
+                  <strong>{stat.value}</strong>
+                  <span>{stat.label}</span>
+                </Box>
+              ))}
+            </Box>
+          ) : null}
         </section>
         
         <section className="home-visual" aria-label="Profile portrait">
@@ -226,7 +213,7 @@ export default function Portfolio({ onNavigate, onOpenResume, onOpenScheduler })
                 {settings?.profileImage ? (
                   <LazyImage
                     src={settings.profileImage}
-                    alt={`${settings?.name || 'John Doe'} profile`}
+                    alt={displayName ? `${displayName} profile` : 'Profile portrait'}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 ) : (

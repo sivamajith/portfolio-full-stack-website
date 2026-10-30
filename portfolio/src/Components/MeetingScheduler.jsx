@@ -131,7 +131,7 @@ export default function MeetingScheduler({ open, onClose }) {
 VERSION:2.0
 PRODID:-//Portfolio//MeetingScheduler//EN
 BEGIN:VEVENT
-SUMMARY:${currentMeeting.title} with ${settings?.name || 'John Doe'}
+SUMMARY:${currentMeeting.title}${settings?.name ? ` with ${settings.name}` : ''}
 DESCRIPTION:${notes || 'Discovery Call booked via Developer Portfolio'}
 STATUS:CONFIRMED
 END:VEVENT
@@ -147,7 +147,7 @@ END:VCALENDAR`;
   };
 
   const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-    `${currentMeeting.title} with ${settings?.name || 'John Doe'}`
+    `${currentMeeting.title}${settings?.name ? ` with ${settings.name}` : ''}`
   )}&details=${encodeURIComponent(notes || 'Booked via Portfolio')}`;
 
   const resetForm = () => {

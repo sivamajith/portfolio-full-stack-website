@@ -41,129 +41,7 @@ const COLORS = {
   chipText: "var(--accent-dark, #15803d)",
 };
 
-const PROJECTS = [
-  {
-    id: "devflow",
-    title: "DevFlow",
-    subtitle: "Project Management Dashboard",
-    tags: ["React", "Node.js", "MongoDB", "WebSockets"],
-    type: "dashboard",
-    category: "Full Stack",
-    impact: "A focused workspace that turns complex team activity into a clear weekly sprint rhythm.",
-    liveUrl: "https://github.com",
-    sourceUrl: "https://github.com",
-    codeSnippet: `// DevFlow Real-time Task Board Hook
-import { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-
-export function useDevFlowBoard(boardId) {
-  const [columns, setColumns] = useState({
-    todo: [{ id: 1, title: 'Auth API endpoint', tag: 'Backend' }],
-    inProgress: [{ id: 2, title: 'Kanban drag motion', tag: 'UI' }],
-    done: [{ id: 3, title: 'Database schema migration', tag: 'Database' }]
-  });
-
-  const moveTask = (taskId, targetCol) => {
-    // Broadcast via WebSockets
-    socket.emit('task:move', { taskId, targetCol });
-  };
-
-  return { columns, moveTask };
-}`,
-  },
-  {
-    id: "ecommerce",
-    title: "E-Commerce",
-    subtitle: "Full Stack Storefront",
-    tags: ["React.js", "Next.js", "Stripe", "Tailwind"],
-    type: "gallery",
-    category: "Frontend",
-    impact: "A conversion-focused storefront with sub-second page transitions and instant cart checkout.",
-    liveUrl: "https://github.com",
-    sourceUrl: "https://github.com",
-    codeSnippet: `// Headless Storefront Cart Context
-export function useCart() {
-  const [items, setItems] = useState([]);
-  
-  const addItem = (product) => {
-    setItems((prev) => {
-      const exists = prev.find(i => i.id === product.id);
-      if (exists) {
-        return prev.map(i => i.id === product.id ? {...i, qty: i.qty + 1} : i);
-      }
-      return [...prev, { ...product, qty: 1 }];
-    });
-  };
-
-  const total = items.reduce((acc, i) => acc + (i.price * i.qty), 0);
-  return { items, addItem, total };
-}`,
-  },
-  {
-    id: "chatapp",
-    title: "Chat App",
-    subtitle: "Real-time Messaging Platform",
-    tags: ["Socket.io", "Node.js", "Redis", "React"],
-    type: "chat",
-    category: "Full Stack",
-    impact: "A real-time messaging experience designed around speed, typing presence, and human connection.",
-    liveUrl: "https://github.com",
-    sourceUrl: "https://github.com",
-    codeSnippet: `// WebSocket Chat Client Handler
-const socket = io(CHAT_SERVER_URL);
-
-socket.on('message:received', (payload) => {
-  appendMessage({
-    id: payload.id,
-    sender: payload.sender,
-    text: payload.text,
-    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  });
-  playNotificationChime();
-});`,
-  },
-  {
-    id: "portfolio",
-    title: "Portfolio Site",
-    subtitle: "Interactive Brand Experience",
-    tags: ["Next.js", "Web Audio", "Material UI"],
-    type: "gallery",
-    category: "Frontend",
-    impact: "A high-signal personal brand system with expressive motion and a sharp editorial hierarchy.",
-    liveUrl: "https://github.com",
-    sourceUrl: "https://github.com",
-    codeSnippet: `// Dynamic Theme & Audio System
-const playFeedback = (type) => {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator();
-  osc.frequency.setValueAtTime(type === 'success' ? 880 : 440, ctx.currentTime);
-  osc.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime + 0.1);
-};`,
-  },
-  {
-    id: "weather",
-    title: "Weather App",
-    subtitle: "Realtime Forecast Widget",
-    tags: ["React", "Weather API", "Charts"],
-    type: "dashboard",
-    category: "Experiments",
-    impact: "A glanceable forecast widget that keeps useful weather information calm and accessible.",
-    liveUrl: "https://github.com",
-    sourceUrl: "https://github.com",
-    codeSnippet: `// Realtime Weather Forecaster
-export async function getLiveWeather(city) {
-  const res = await fetch(\`https://api.weather.com/v1/forecast?q=\${city}\`);
-  const data = await res.json();
-  return {
-    temp: data.main.temp,
-    condition: data.weather[0].main,
-    forecast: data.daily
-  };
-}`,
-  },
-];
+const PROJECTS = [];
 
 /* ----------------------------- Mockup Previews ----------------------------- */
 
@@ -558,7 +436,7 @@ export default function FeaturedWork({ onNavigate, onOpenResume, onOpenScheduler
   const [projects, setProjects] = useState(PROJECTS);
   const [filter, setFilter] = useState("All");
   const [selectedProject, setSelectedProject] = useState(null);
-  const [activeProject, setActiveProject] = useState(PROJECTS[0]);
+  const [activeProject, setActiveProject] = useState(null);
   
 
   const availableCategories = Array.from(
@@ -569,6 +447,15 @@ export default function FeaturedWork({ onNavigate, onOpenResume, onOpenScheduler
   const visibleProjects = filter === "All"
     ? projects
     : projects.filter((project) => project.category?.toLowerCase() === filter.toLowerCase());
+
+  useEffect(() => {
+    if (!activeProject && visibleProjects.length) {
+      setActiveProject(visibleProjects[0]);
+    }
+    if (activeProject && !visibleProjects.some((project) => project.id === activeProject.id)) {
+      setActiveProject(visibleProjects[0] || null);
+    }
+  }, [activeProject, visibleProjects]);
 
   const loadProjects = () => {
     loadCachedProjects()

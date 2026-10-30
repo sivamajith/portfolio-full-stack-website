@@ -446,8 +446,8 @@ export default function App() {
             <Box className="footer-brand">
              
               <Box>
-                <Typography className="footer-name">{settings?.name || 'John Doe'}</Typography>
-                <Typography className="footer-caption">{settings?.role || 'Full Stack Developer'}</Typography>
+                {settings?.name ? <Typography className="footer-name">{settings.name}</Typography> : null}
+                {settings?.role ? <Typography className="footer-caption">{settings.role}</Typography> : null}
               </Box>
               <p>Digital products with clarity, character, and production-grade engineering.</p>
               <Box className="footer-socials">
@@ -500,7 +500,7 @@ export default function App() {
             <span>
               <i style={{ background: 'var(--accent-color, #22c55e)' }} /> Available for select projects <b>·</b> Local time {localTime}
             </span>
-            <small>© {new Date().getFullYear()} {settings?.name || 'John Doe'}. Built with care & React.</small>
+            <small>© {new Date().getFullYear()}{settings?.name ? ` ${settings.name}` : ''}. Built with care & React.</small>
           </Box>
         </footer>
 
